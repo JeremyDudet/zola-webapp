@@ -3,19 +3,27 @@ import { withTRPC } from '@trpc/next'
 import type { AppRouter } from '../server/router'
 import type { AppType } from 'next/dist/shared/lib/utils'
 import { ChakraProvider } from '@chakra-ui/react'
+import { UserProvider } from '../context/UserContext'
 import Layout from '../components/layouts/main'
 import Fonts from '../components/fonts'
 import theme from '../lib/theme'
 import superjson from 'superjson'
 
+// todo
+// [] fetch users from database
+// [] check localstorage for logged in user
+// [] if user is not logged in, redirect to login page
+
 const MyApp: AppType = ({ Component, pageProps, router }) => {
   return (
-    <ChakraProvider theme={theme}>
-      <Fonts />
-      <Layout router={router}>
-        <Component {...pageProps} />
-      </Layout>
-    </ChakraProvider>
+    <UserProvider>
+      <ChakraProvider theme={theme}>
+        <Fonts />
+        <Layout router={router}>
+          <Component {...pageProps} />
+        </Layout>
+      </ChakraProvider>
+    </UserProvider>
   )
 }
 

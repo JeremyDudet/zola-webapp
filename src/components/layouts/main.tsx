@@ -4,7 +4,6 @@ import {
   Box,
   Flex,
   Icon,
-  Text,
   Collapse,
   Drawer,
   DrawerOverlay,
@@ -162,7 +161,7 @@ const Main = ({ children, router }) => {
         <Flex
           as="header"
           align="center"
-          justify="space-between"
+          justify="flex-end"
           w="full"
           px="4"
           bg="white"
@@ -173,29 +172,6 @@ const Main = ({ children, router }) => {
           color="inherit"
           h="14"
         >
-          <IconButton
-            aria-label="Menu"
-            display={{
-              base: 'inline-flex',
-              md: 'none'
-            }}
-            onClick={sidebar.onOpen}
-            icon={<FiMenu />}
-            size="sm"
-          />
-          <InputGroup
-            w="96"
-            display={{
-              base: 'none',
-              md: 'flex'
-            }}
-          >
-            <InputLeftElement color="gray.500">
-              <FiSearch />
-            </InputLeftElement>
-            <Input placeholder="Search for articles..." />
-          </InputGroup>
-
           <Flex align="center" gap={2}>
             <Icon color="gray.500" as={FaBell} cursor="pointer" />
             <ThemeToggleButton />
@@ -203,8 +179,7 @@ const Main = ({ children, router }) => {
         </Flex>
 
         <Box as="main" p="4">
-          {/* Add content here, remove div below  */}
-          <Box borderWidth="4px" borderStyle="dashed" rounded="md" h="96" />
+          {children}
         </Box>
       </Box>
     </Box>
