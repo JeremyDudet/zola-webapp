@@ -24,7 +24,8 @@
     "**/*.mjs",
     "src/components/layouts/main.js",
     "src/components/layouts/main.js",
-    "src/lib/theme.js"
+    "src/lib/theme.js",
+    "prettier.config.js"
   ],
   "exclude": ["node_modules"]
 }
