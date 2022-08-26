@@ -1,17 +1,16 @@
 import Logo from '../Logo'
+import NextLink from 'next/link'
 import ThemeToggleButton from '../theme-toggle-button'
+import { useUserContext } from '../../context/UserContext'
 import {
   Box,
   Flex,
   Icon,
-  Collapse,
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  Input,
-  IconButton,
-  InputGroup,
-  InputLeftElement
+  Center,
+  Link
 } from '@chakra-ui/react'
 import { useDisclosure, useColorModeValue } from '@chakra-ui/react'
 import { FiMenu, FiSearch } from 'react-icons/fi'
@@ -20,53 +19,67 @@ import { MdHome, MdKeyboardArrowRight } from 'react-icons/md'
 import { HiCollection, HiCode } from 'react-icons/hi'
 import { AiFillGift } from 'react-icons/ai'
 import { BsGearFill } from 'react-icons/bs'
+import { userAgent } from 'next/server'
+
+// todo
+//
 
 const Main = ({ children, router }) => {
+  const path = router.asPath
+  const { user } = useUserContext()
   const sidebar = useDisclosure()
-  const integrations = useDisclosure()
   const color = useColorModeValue('gray.600', 'gray.300')
 
-  const NavItem = props => {
-    const { icon, children, ...rest } = props
+  const NavItem = ({ icon, children, href, path }) => {
+    const active = path === href
+    const inactiveColor = useColorModeValue('gray200', 'whiteAlpha.900')
+    const activeColor = useColorModeValue('gray800', 'whiteAlpha.900')
     return (
-      <Flex
-        align="center"
-        px="4"
-        pl="4"
-        py="3"
-        cursor="pointer"
-        color="inherit"
-        _dark={{
-          color: 'gray.400'
-        }}
-        _hover={{
-          bg: 'gray.100',
-          _dark: {
-            bg: 'gray.900'
-          },
-          color: 'gray.900'
-        }}
-        role="group"
-        fontWeight="semibold"
-        transition=".15s ease"
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mx="2"
-            boxSize="4"
-            _groupHover={{
-              color: color
+      <NextLink href={href} passHref>
+        <Link
+          p={2}
+          bg={active ? 'glassTeal' : undefined}
+          color={active ? activeColor : inactiveColor}
+        >
+          <Flex
+            align="center"
+            px="4"
+            pl="4"
+            py="3"
+            cursor="pointer"
+            color="inherit"
+            _dark={{
+              color: 'gray.400'
             }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
+            _hover={{
+              bg: 'gray.100',
+              _dark: {
+                bg: 'gray.900'
+              },
+              color: 'gray.900'
+            }}
+            role="group"
+            fontWeight="semibold"
+            transition=".15s ease"
+          >
+            {icon && (
+              <Icon
+                mx="2"
+                boxSize="4"
+                _groupHover={{
+                  color: color
+                }}
+                as={icon}
+              />
+            )}
+            {children}
+          </Flex>
+        </Link>
+      </NextLink>
     )
   }
 
-  const SidebarContent = props => (
+  const SidebarContent = () => (
     <Box
       as="nav"
       pos="fixed"
@@ -81,11 +94,9 @@ const Main = ({ children, router }) => {
       _dark={{
         bg: 'gray.800'
       }}
-      border
       color="inherit"
       borderRightWidth="1px"
       w="60"
-      {...props}
     >
       <Flex px="4" py="5" align="center">
         <Logo />
@@ -97,34 +108,25 @@ const Main = ({ children, router }) => {
         color="gray.600"
         aria-label="Main Navigation"
       >
-        <NavItem icon={MdHome}>Home</NavItem>
-        <NavItem icon={FaRss}>Articles</NavItem>
-        <NavItem icon={HiCollection}>Collections</NavItem>
-        <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
-        <NavItem icon={HiCode} onClick={integrations.onToggle}>
-          Integrations
-          <Icon
-            as={MdKeyboardArrowRight}
-            ml="auto"
-            transform={integrations.isOpen && 'rotate(90deg)'}
-          />
+        <NavItem icon={MdHome} path={path} href="/">
+          Home
         </NavItem>
-        <Collapse in={integrations.isOpen}>
-          <NavItem pl="12" py="2">
-            Shopify
-          </NavItem>
-          <NavItem pl="12" py="2">
-            Slack
-          </NavItem>
-          <NavItem pl="12" py="2">
-            Zapier
-          </NavItem>
-        </Collapse>
-        <NavItem icon={AiFillGift}>Changelog</NavItem>
-        <NavItem icon={BsGearFill}>Settings</NavItem>
+        <NavItem icon={FaRss} path={path} href="/tasks">
+          Tasks
+        </NavItem>
+        <NavItem icon={HiCollection} path={path} href="/food-notes">
+          Food Notes
+        </NavItem>
+        <NavItem icon={FaClipboardCheck} path={path} href="/videos">
+          Videos
+        </NavItem>
       </Flex>
     </Box>
   )
+
+  // check if there is a logged in user
+  // if not, hide the sidebar
+  if (!user) return <Center pt="5rem">{children}</Center>
 
   return (
     <Box
