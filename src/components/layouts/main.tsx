@@ -10,25 +10,66 @@ import {
   DrawerOverlay,
   DrawerContent,
   Center,
-  Link
+  Link,
+  Divider,
+  Heading,
+  IconButton,
+  Text
 } from '@chakra-ui/react'
+import { CheckCircleIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { useDisclosure, useColorModeValue } from '@chakra-ui/react'
-import { FiMenu, FiSearch } from 'react-icons/fi'
-import { FaBell, FaRss, FaClipboardCheck } from 'react-icons/fa'
-import { MdHome, MdKeyboardArrowRight } from 'react-icons/md'
-import { HiCollection, HiCode } from 'react-icons/hi'
-import { AiFillGift } from 'react-icons/ai'
-import { BsGearFill } from 'react-icons/bs'
-import { userAgent } from 'next/server'
+import { FaBell, FaClipboardCheck } from 'react-icons/fa'
+import { MdHome } from 'react-icons/md'
+import { HiCollection } from 'react-icons/hi'
+import { ImShuffle } from 'react-icons/im'
 
 // todo
-//
+// [] add logout button
 
 const Main = ({ children, router }) => {
   const path = router.asPath
-  const { user } = useUserContext()
+  const { user, logOut } = useUserContext()
   const sidebar = useDisclosure()
   const color = useColorModeValue('gray.600', 'gray.300')
+
+  const SwitchUser = ({ icon }) => {
+    return (
+      <Flex
+        align="center"
+        px="4"
+        pl="4"
+        py="3"
+        cursor="pointer"
+        color="inherit"
+        _dark={{
+          color: 'gray.400'
+        }}
+        _hover={{
+          bg: 'gray.100',
+          _dark: {
+            bg: 'gray.900'
+          },
+          color: 'gray.900'
+        }}
+        role="group"
+        fontWeight="semibold"
+        transition=".15s ease"
+        onClick={() => logOut()}
+      >
+        {icon && (
+          <Icon
+            mx="2"
+            boxSize="4"
+            _groupHover={{
+              color: color
+            }}
+            as={icon}
+          />
+        )}
+        Switch User
+      </Flex>
+    )
+  }
 
   const NavItem = ({ icon, children, href, path }) => {
     const active = path === href
@@ -37,7 +78,6 @@ const Main = ({ children, router }) => {
     return (
       <NextLink href={href} passHref>
         <Link
-          p={2}
           bg={active ? 'glassTeal' : undefined}
           color={active ? activeColor : inactiveColor}
         >
@@ -79,8 +119,18 @@ const Main = ({ children, router }) => {
     )
   }
 
+  const SidebarHeading = ({ children }) => (
+    <Text as="h6" size="sm" color="gray.500" pl={6} mt={4} fontStyle="normal">
+      {children}
+    </Text>
+  )
+
   const SidebarContent = () => (
     <Box
+      border={{
+        base: 'none',
+        md: ''
+      }}
       as="nav"
       pos="fixed"
       top="0"
@@ -111,7 +161,8 @@ const Main = ({ children, router }) => {
         <NavItem icon={MdHome} path={path} href="/">
           Home
         </NavItem>
-        <NavItem icon={FaRss} path={path} href="/tasks">
+        <SidebarHeading>Information</SidebarHeading>
+        <NavItem icon={CheckCircleIcon} path={path} href="/tasks">
           Tasks
         </NavItem>
         <NavItem icon={HiCollection} path={path} href="/food-notes">
@@ -120,13 +171,21 @@ const Main = ({ children, router }) => {
         <NavItem icon={FaClipboardCheck} path={path} href="/videos">
           Videos
         </NavItem>
+        <NavItem icon={FaClipboardCheck} path={path} href="/seating-charts">
+          Seating Charts
+        </NavItem>
+        <SidebarHeading>Applications</SidebarHeading>
+        <NavItem icon={FaClipboardCheck} path={path} href="/videos">
+          Food Notes Manager
+        </NavItem>
+        <SwitchUser icon={ImShuffle} />
       </Flex>
     </Box>
   )
 
   // check if there is a logged in user
   // if not, hide the sidebar
-  if (!user) return <Center pt="5rem">{children}</Center>
+  if (!user.firstName) return <Center pt="5rem">{children}</Center>
 
   return (
     <Box
@@ -137,20 +196,18 @@ const Main = ({ children, router }) => {
       }}
       minH="100vh"
     >
-      <SidebarContent
-        display={{
-          base: 'none',
-          md: 'unset'
-        }}
-      />
+      <Box display={{ base: 'none', md: 'unset' }} w="60">
+        <SidebarContent />
+      </Box>
       <Drawer
         isOpen={sidebar.isOpen}
         onClose={sidebar.onClose}
         placement="left"
+        size="xs"
       >
         <DrawerOverlay />
         <DrawerContent>
-          <SidebarContent w="full" borderRight="none" />
+          <SidebarContent />
         </DrawerContent>
       </Drawer>
       <Box
@@ -163,7 +220,7 @@ const Main = ({ children, router }) => {
         <Flex
           as="header"
           align="center"
-          justify="flex-end"
+          justify="space-between"
           w="full"
           px="4"
           bg="white"
@@ -174,9 +231,27 @@ const Main = ({ children, router }) => {
           color="inherit"
           h="14"
         >
+          <Box>
+            <Box
+              display={{
+                base: 'block',
+                md: 'none'
+              }}
+            >
+              <Logo />
+            </Box>
+          </Box>
           <Flex align="center" gap={2}>
             <Icon color="gray.500" as={FaBell} cursor="pointer" />
             <ThemeToggleButton />
+            <IconButton
+              aria-label="Open Menu"
+              display={{ base: 'inline-flex', md: 'none' }}
+              icon={<HamburgerIcon boxSize={5} />}
+              onClick={
+                sidebar.isOpen === true ? sidebar.onClose : sidebar.onOpen
+              }
+            />
           </Flex>
         </Flex>
 
