@@ -15,7 +15,7 @@ and then the client-side will render the original page they were on.
 
 */
 
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { trpc } from '../utils/trpc'
 import { ArrowRightIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 import {
@@ -48,12 +48,11 @@ import { User } from '../types' // import User type
 // [] if it does, login new user through context
 
 export default function Auth() {
-  const toast = useToast()
-  const passwordInput = useRef<HTMLInputElement | undefined>(null)
-
-  const { onOpen, onClose, isOpen } = useDisclosure()
-  const [password, setPassword] = useState<string>('')
-  const { changeUser } = useUserContext()
+  const toast = useToast() // for toast notifications
+  const { onOpen, onClose, isOpen } = useDisclosure() // for popover
+  const passwordInput = useRef<HTMLInputElement>(null) // password input ref
+  const [password, setPassword] = useState<string>('') // password state
+  const { changeUser } = useUserContext() // change user context
 
   // fetch array of user objects from database
   const users = trpc.useQuery(['user.getAll'])?.data

@@ -21,7 +21,7 @@ import { useDisclosure, useColorModeValue } from '@chakra-ui/react'
 import { FaBell } from 'react-icons/fa'
 import { MdHome } from 'react-icons/md'
 import { ImShuffle } from 'react-icons/im'
-import { SingletonRouter } from 'next/router'
+import { Router } from 'next/router'
 import { IconType } from 'react-icons'
 
 // todo
@@ -29,7 +29,7 @@ import { IconType } from 'react-icons'
 
 interface MainProps {
   children: React.ReactNode
-  router: SingletonRouter
+  router: Router
 }
 
 interface IconProps {

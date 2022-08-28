@@ -5,6 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { UserProvider } from '../context/UserContext'
 import Layout from '../components/layouts/main'
 import Fonts from '../components/fonts'
+import ClientOnly from '../components/ClientOnly'
 import theme from '../lib/theme'
 import superjson from 'superjson'
 import { AppProps } from 'next/app'
@@ -20,7 +21,9 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
       <ChakraProvider theme={theme}>
         <Fonts />
         <Layout router={router}>
-          <Component {...pageProps} key={router.route} />
+          <ClientOnly>
+            <Component {...pageProps} key={router.route} />
+          </ClientOnly>
         </Layout>
       </ChakraProvider>
     </UserProvider>
