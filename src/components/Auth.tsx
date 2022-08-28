@@ -49,7 +49,7 @@ import { User } from '../types' // import User type
 
 export default function Auth() {
   const toast = useToast()
-  const passwordInput = useRef()
+  const passwordInput = useRef<HTMLInputElement | undefined>(null)
 
   const { onOpen, onClose, isOpen } = useDisclosure()
   const [password, setPassword] = useState<string>('')
@@ -74,7 +74,9 @@ export default function Auth() {
       // show error message
       console.log('Error: no such password')
       setPassword('') // clear password
-      passwordInput?.current.focus() // focus on password input
+      if (passwordInput.current) {
+        passwordInput?.current?.focus() // focus on password input
+      }
       return toast({
         // send error message toast
         position: 'top',

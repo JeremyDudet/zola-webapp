@@ -15,20 +15,16 @@ const LogoBox = styled.span`
   maring-top: 7px;
   margin-right: 4px;
   padding-top: 5px;
-` 
+`
 
 const Logo = () => {
   return (
-    <Link href="/">
-      <a>
-        <LogoBox>
-          <Image 
-            src={useColorModeValue(barzolaBlack, barzolaWhite)} 
-            alt="BarZola"
-          />
-        </LogoBox>
-      </a>
-    </Link>
+    <LogoBox>
+      <Image
+        src={useColorModeValue(barzolaBlack, barzolaWhite)}
+        alt="BarZola"
+      />
+    </LogoBox>
   )
 }
 

@@ -11,115 +11,143 @@ import {
   DrawerContent,
   Center,
   Link,
-  Divider,
-  Heading,
   IconButton,
   Text
 } from '@chakra-ui/react'
-import { CheckCircleIcon, HamburgerIcon } from '@chakra-ui/icons'
+import { BsCheck2Square } from 'react-icons/bs'
+import { BiFoodMenu, BiChair, BiEdit } from 'react-icons/bi'
+import { HamburgerIcon } from '@chakra-ui/icons'
 import { useDisclosure, useColorModeValue } from '@chakra-ui/react'
-import { FaBell, FaClipboardCheck } from 'react-icons/fa'
+import { FaBell } from 'react-icons/fa'
 import { MdHome } from 'react-icons/md'
-import { HiCollection } from 'react-icons/hi'
 import { ImShuffle } from 'react-icons/im'
+import { SingletonRouter } from 'next/router'
+import { IconType } from 'react-icons'
 
 // todo
 // [] add logout button
 
-const Main = ({ children, router }) => {
+interface MainProps {
+  children: React.ReactNode
+  router: SingletonRouter
+}
+
+interface IconProps {
+  icon: IconType
+}
+
+interface NavItemProps {
+  icon: IconType
+  children: React.ReactNode
+  href: string
+  path: string
+}
+
+interface ChildrenProps {
+  children: React.ReactNode
+}
+
+const Main = ({ children, router }: MainProps) => {
   const path = router.asPath
   const { user, logOut } = useUserContext()
   const sidebar = useDisclosure()
   const color = useColorModeValue('gray.600', 'gray.300')
 
-  const SwitchUser = ({ icon }) => {
+  const SwitchUser = ({ icon }: IconProps) => {
     return (
-      <Flex
-        align="center"
-        px="4"
-        pl="4"
-        py="3"
-        cursor="pointer"
-        color="inherit"
-        _dark={{
-          color: 'gray.400'
-        }}
-        _hover={{
-          bg: 'gray.100',
-          _dark: {
-            bg: 'gray.900'
-          },
-          color: 'gray.900'
-        }}
-        role="group"
-        fontWeight="semibold"
-        transition=".15s ease"
-        onClick={() => logOut()}
-      >
-        {icon && (
-          <Icon
-            mx="2"
-            boxSize="4"
-            _groupHover={{
-              color: color
-            }}
-            as={icon}
-          />
-        )}
-        Switch User
-      </Flex>
+      <Box p={2}>
+        <Flex
+          justify="flex-start"
+          align="center"
+          px="4"
+          pl="4"
+          py="3"
+          cursor="pointer"
+          color="inherit"
+          borderRadius="md"
+          _dark={{
+            color: 'gray.400'
+          }}
+          _hover={{
+            bg: 'gray.100',
+            _dark: {
+              bg: 'gray.900'
+            },
+            color: 'gray.900'
+          }}
+          role="group"
+          fontWeight="semibold"
+          transition=".15s ease"
+          onClick={() => logOut()}
+        >
+          {icon && (
+            <Icon
+              mx="2"
+              boxSize="4"
+              _groupHover={{
+                color: color
+              }}
+              as={icon}
+            />
+          )}
+          Log Out
+        </Flex>
+      </Box>
     )
   }
 
-  const NavItem = ({ icon, children, href, path }) => {
+  const NavItem = ({ icon, children, href, path }: NavItemProps) => {
     const active = path === href
     const inactiveColor = useColorModeValue('gray200', 'whiteAlpha.900')
     const activeColor = useColorModeValue('gray800', 'whiteAlpha.900')
     return (
-      <NextLink href={href} passHref>
-        <Link
-          bg={active ? 'glassTeal' : undefined}
-          color={active ? activeColor : inactiveColor}
-        >
-          <Flex
-            align="center"
-            px="4"
-            pl="4"
-            py="3"
-            cursor="pointer"
-            color="inherit"
-            _dark={{
-              color: 'gray.400'
-            }}
-            _hover={{
-              bg: 'gray.100',
-              _dark: {
-                bg: 'gray.900'
-              },
-              color: 'gray.900'
-            }}
-            role="group"
-            fontWeight="semibold"
-            transition=".15s ease"
+      <Box p="2">
+        <NextLink href={href} passHref onClick={sidebar.onToggle}>
+          <Link
+            bg={active ? 'glassTeal' : undefined}
+            color={active ? activeColor : inactiveColor}
           >
-            {icon && (
-              <Icon
-                mx="2"
-                boxSize="4"
-                _groupHover={{
-                  color: color
-                }}
-                as={icon}
-              />
-            )}
-            {children}
-          </Flex>
-        </Link>
-      </NextLink>
+            <Flex
+              align="center"
+              px="4"
+              pl="4"
+              py="3"
+              cursor="pointer"
+              color="inherit"
+              borderRadius="md"
+              _dark={{
+                color: 'gray.400'
+              }}
+              _hover={{
+                bg: 'gray.100',
+                _dark: {
+                  bg: 'gray.900'
+                },
+                color: 'gray.900'
+              }}
+              role="group"
+              fontWeight="semibold"
+              transition=".15s ease"
+            >
+              {icon && (
+                <Icon
+                  mx="2"
+                  boxSize="4"
+                  _groupHover={{
+                    color: color
+                  }}
+                  as={icon}
+                />
+              )}
+              {children}
+            </Flex>
+          </Link>
+        </NextLink>
+      </Box>
     )
   }
 
-  const SidebarHeading = ({ children }) => (
+  const SidebarHeading = ({ children }: ChildrenProps) => (
     <Text as="h6" size="sm" color="gray.500" pl={6} mt={4} fontStyle="normal">
       {children}
     </Text>
@@ -127,9 +155,9 @@ const Main = ({ children, router }) => {
 
   const SidebarContent = () => (
     <Box
-      border={{
-        base: 'none',
-        md: ''
+      borderRightWidth={{
+        base: '0',
+        md: '1px'
       }}
       as="nav"
       pos="fixed"
@@ -145,7 +173,6 @@ const Main = ({ children, router }) => {
         bg: 'gray.800'
       }}
       color="inherit"
-      borderRightWidth="1px"
       w="60"
     >
       <Flex px="4" py="5" align="center">
@@ -162,22 +189,20 @@ const Main = ({ children, router }) => {
           Home
         </NavItem>
         <SidebarHeading>Information</SidebarHeading>
-        <NavItem icon={CheckCircleIcon} path={path} href="/tasks">
+        <NavItem icon={BsCheck2Square} path={path} href="/tasks">
           Tasks
         </NavItem>
-        <NavItem icon={HiCollection} path={path} href="/food-notes">
+        <NavItem icon={BiFoodMenu} path={path} href="/food-notes">
           Food Notes
         </NavItem>
-        <NavItem icon={FaClipboardCheck} path={path} href="/videos">
-          Videos
-        </NavItem>
-        <NavItem icon={FaClipboardCheck} path={path} href="/seating-charts">
+        <NavItem icon={BiChair} path={path} href="/seating-charts">
           Seating Charts
         </NavItem>
         <SidebarHeading>Applications</SidebarHeading>
-        <NavItem icon={FaClipboardCheck} path={path} href="/videos">
+        <NavItem icon={BiEdit} path={path} href="/food-notes-manager">
           Food Notes Manager
         </NavItem>
+        <SidebarHeading>Settings</SidebarHeading>
         <SwitchUser icon={ImShuffle} />
       </Flex>
     </Box>

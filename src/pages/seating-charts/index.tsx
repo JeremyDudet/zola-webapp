@@ -7,6 +7,9 @@ import dinning_room_map from '../../../images/dinning-room-map.png'
 import bar_map from '../../../images/bar-map.png'
 import outdoor_map from '../../../images/outdoor-map.png'
 
+// todo
+// [] save images to database
+
 export default function Index() {
   const { user } = useUserContext()
 

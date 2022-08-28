@@ -1,22 +1,20 @@
 // src/pages/_app.tsx
 import { withTRPC } from '@trpc/next'
 import type { AppRouter } from '../server/router'
-import type { AppType } from 'next/dist/shared/lib/utils'
 import { ChakraProvider } from '@chakra-ui/react'
 import { UserProvider } from '../context/UserContext'
-import { useUserContext } from '../context/UserContext'
 import Layout from '../components/layouts/main'
 import Fonts from '../components/fonts'
-import Auth from '../components/Auth'
 import theme from '../lib/theme'
 import superjson from 'superjson'
+import { AppProps } from 'next/app'
 
 // todo
 // [] fetch users from database
 // [] check localstorage for logged in user
 // [] if user is not logged in, redirect to login page
 
-const MyApp: AppType = ({ Component, pageProps, router }) => {
+const MyApp = ({ Component, pageProps, router }: AppProps) => {
   return (
     <UserProvider>
       <ChakraProvider theme={theme}>
