@@ -5,11 +5,9 @@
 */
 import { Heading } from '@chakra-ui/react'
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import { trpc } from '../utils/trpc'
 import { useUserContext } from '../context/UserContext' // import User state
 import Auth from '../components/Auth'
-import ClientOnly from '../components/ClientOnly'
 
 // todo
 // integrate login check

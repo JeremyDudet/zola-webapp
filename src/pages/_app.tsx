@@ -17,16 +17,16 @@ import { AppProps } from 'next/app'
 
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
   return (
-    <UserProvider>
-      <ChakraProvider theme={theme}>
-        <Fonts />
-        <Layout router={router}>
-          <ClientOnly>
+    <ChakraProvider theme={theme}>
+      <Fonts />
+      <UserProvider>
+        <ClientOnly>
+          <Layout router={router}>
             <Component {...pageProps} key={router.route} />
-          </ClientOnly>
-        </Layout>
-      </ChakraProvider>
-    </UserProvider>
+          </Layout>
+        </ClientOnly>
+      </UserProvider>
+    </ChakraProvider>
   )
 }
 
