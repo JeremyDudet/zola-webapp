@@ -1,3 +1,10 @@
+/*
+This is where we manage the state of the logged in user.
+We use the React context API to make the user state available to all components.
+
+We also use localStorage to persist the user state between page refreshes.
+*/
+
 import { createContext, useContext, useState } from 'react'
 import { User } from '../types' // import User type
 

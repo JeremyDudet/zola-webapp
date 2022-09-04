@@ -55,13 +55,13 @@ export default function Auth() {
   const { changeUser } = useUserContext() // change user context
 
   // fetch array of user objects from database
-  const users = trpc.useQuery(['user.getAll'])?.data
+  const userQuery = trpc.useQuery(['users.getUser'])
 
   // use this to check if password matches a user's password
   function handleSubmit(password: string) {
     let matched = false
     // loop through users array
-    users?.forEach((user: User) => {
+    userQuery?.data?.forEach((user: User) => {
       if (password === user.password) {
         console.log('password matched')
         matched = true

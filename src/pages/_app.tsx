@@ -10,6 +10,11 @@ import theme from '../lib/theme'
 import superjson from 'superjson'
 import { AppProps } from 'next/app'
 
+// Here we connect our backend to our frontend.
+// Here we configure tRPC and React Query.
+// We are also setting ssr (Server Side Rendering) to false for now.
+// We also wrap our app in Chakra UI and our custom UserProvider.
+
 // todo
 // [] fetch users from database
 // [] check localstorage for logged in user

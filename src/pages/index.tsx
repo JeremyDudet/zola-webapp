@@ -14,11 +14,16 @@ import Auth from '../components/Auth'
 
 const Home: NextPage = () => {
   const { user } = useUserContext()
-  const users = trpc.useQuery(['user.getAll'])
+  const userQuery = trpc.useQuery(['users.getUser'])
 
   if (!user.firstName) return <Auth /> // if user is not logged in, return Auth component
 
-  return <Heading>{JSON.stringify(users.data)}</Heading>
+  return (
+    <>
+      <Heading>{JSON.stringify(user.data)}</Heading>
+      {userQuery.data && <Heading>{JSON.stringify(userQuery.data)}</Heading>}
+    </>
+  )
 }
 
 export default Home
