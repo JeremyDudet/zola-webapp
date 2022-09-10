@@ -28,18 +28,6 @@ const components = {
       color: mode('#3d7aed', '#ff63c3')(props),
       textUnderlineOffset: 3
     })
-  },
-  Drawer: {
-    parts: ['dialog', 'header', 'body', 'footer'],
-    variants: {
-      primary: {
-        secondary: {
-          dialog: {
-            maxW: '200px'
-          }
-        }
-      }
-    }
   }
 }
 

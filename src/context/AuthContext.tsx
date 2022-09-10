@@ -14,7 +14,8 @@ const emptyUser: User = {
   firstName: '',
   lastName: '',
   alias: '',
-  password: ''
+  password: '',
+  auth: ''
 }
 
 // set state to localStorage if it exists, otherwise set to emptyUser
@@ -32,13 +33,11 @@ const setInitialState = () => {
 }
 
 // create context
-const UserContext = createContext(setInitialState())
+const AuthContext = createContext(setInitialState())
 
-export function useUserContext() {
-  return useContext(UserContext)
-}
+export const useAuthContext = () => useContext(AuthContext)
 
-export function UserProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>(setInitialState())
 
   function changeUser(user: User) {
@@ -72,8 +71,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <UserContext.Provider value={{ user, changeUser, logOut }}>
+    <AuthContext.Provider value={{ user, changeUser, logOut }}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   )
 }

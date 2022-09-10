@@ -2,7 +2,7 @@ import React from 'react'
 import Auth from '../../components/Auth'
 import Image from 'next/image'
 import { Box, Heading } from '@chakra-ui/react'
-import { useUserContext } from '../../context/UserContext' // import User state
+import { useUserContext } from '../../context/AuthContext' // import User state
 import dinning_room_map from '../../../images/dinning-room-map.png'
 import bar_map from '../../../images/bar-map.png'
 import outdoor_map from '../../../images/outdoor-map.png'

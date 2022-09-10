@@ -38,30 +38,32 @@ import {
   PinInputField,
   useToast
 } from '@chakra-ui/react'
-import { useUserContext } from '../context/UserContext'
-import { User } from '../types' // import User type
+import { useAuthContext } from '../context/AuthContext'
+// import { User } from '../types' // import User type
 // import PasswordInput from './PasswordInput'
 
 // todo
 // [x] import users data from database
 // [x] check if password provided matches a user's password
 // [] if it does, login new user through context
+// [] fix input delete bug
 
 export default function Auth() {
   const toast = useToast() // for toast notifications
   const { onOpen, onClose, isOpen } = useDisclosure() // for popover
   const passwordInput = useRef<HTMLInputElement>(null) // password input ref
   const [password, setPassword] = useState<string>('') // password state
-  const { changeUser } = useUserContext() // change user context
+  const { changeUser } = useAuthContext() // change user context
 
   // fetch array of user objects from database
-  const userQuery = trpc.useQuery(['users.getUser'])
+  const userQuery = trpc.useQuery(['user.getUsers'])
+  console.log('userQuery', userQuery.data)
 
   // use this to check if password matches a user's password
   function handleSubmit(password: string) {
     let matched = false
     // loop through users array
-    userQuery?.data?.forEach((user: User) => {
+    userQuery?.data?.forEach(user => {
       if (password === user.password) {
         console.log('password matched')
         matched = true

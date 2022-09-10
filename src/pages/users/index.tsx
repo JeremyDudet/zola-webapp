@@ -3,7 +3,7 @@ This page will be where admnistrators can manage users.
 */
 
 import React from 'react'
-import { useUserContext } from '../../context/UserContext' // import User state
+import { useUserContext } from '../../context/AuthContext' // import User state
 // import { trpc } from '../../utils/trpc'
 import Auth from '../../components/Auth'
 

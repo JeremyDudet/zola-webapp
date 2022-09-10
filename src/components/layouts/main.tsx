@@ -1,7 +1,7 @@
 import Logo from '../Logo'
 import NextLink from 'next/link'
 import ThemeToggleButton from '../theme-toggle-button'
-import { useUserContext } from '../../context/UserContext'
+import { useAuthContext } from '../../context/AuthContext'
 import {
   Box,
   Flex,
@@ -9,7 +9,6 @@ import {
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  Center,
   Link,
   IconButton,
   Text
@@ -49,7 +48,7 @@ interface ChildrenProps {
 
 const Main = ({ children, router }: MainProps) => {
   const path = router.asPath
-  const { user, logOut } = useUserContext()
+  const { user, logOut } = useAuthContext()
   const sidebar = useDisclosure()
   const color = useColorModeValue('gray.600', 'gray.300')
 
@@ -66,7 +65,7 @@ const Main = ({ children, router }: MainProps) => {
           color="inherit"
           borderRadius="md"
           _dark={{
-            color: 'gray.400'
+            color: 'gray.100'
           }}
           _hover={{
             bg: 'gray.100',
@@ -90,7 +89,7 @@ const Main = ({ children, router }: MainProps) => {
               as={icon}
             />
           )}
-          Log Out
+          Switch User
         </Flex>
       </Box>
     )
@@ -102,7 +101,7 @@ const Main = ({ children, router }: MainProps) => {
     const activeColor = useColorModeValue('gray800', 'whiteAlpha.900')
     return (
       <Box p="2">
-        <NextLink href={href} passHref onClick={sidebar.onToggle}>
+        <NextLink href={href} passHref>
           <Link
             bg={active ? 'glassTeal' : undefined}
             color={active ? activeColor : inactiveColor}
@@ -116,7 +115,7 @@ const Main = ({ children, router }: MainProps) => {
               color="inherit"
               borderRadius="md"
               _dark={{
-                color: 'gray.400'
+                color: 'gray.300'
               }}
               _hover={{
                 bg: 'gray.100',
@@ -128,6 +127,7 @@ const Main = ({ children, router }: MainProps) => {
               role="group"
               fontWeight="semibold"
               transition=".15s ease"
+              onClick={sidebar.onToggle}
             >
               {icon && (
                 <Icon
@@ -170,9 +170,9 @@ const Main = ({ children, router }: MainProps) => {
       overflowY="auto"
       bg="white"
       _dark={{
-        bg: 'gray.800'
+        bg: 'gray.700'
       }}
-      color="inherit"
+      color="gray.100"
       w="60"
     >
       <Flex px="4" py="5" align="center">
@@ -202,6 +202,12 @@ const Main = ({ children, router }: MainProps) => {
         <NavItem icon={BiEdit} path={path} href="/food-notes-manager">
           Food Notes Manager
         </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/tasks-manager">
+          Task Manager
+        </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/users-manager">
+          Users Manager
+        </NavItem>
         <SidebarHeading>Settings</SidebarHeading>
         <SwitchUser icon={ImShuffle} />
       </Flex>
@@ -210,7 +216,6 @@ const Main = ({ children, router }: MainProps) => {
 
   // check if there is a logged in user
   // if not, hide the sidebar
-  if (!user.firstName) return <Center pt="5rem">{children}</Center>
 
   return (
     <Box
@@ -250,7 +255,7 @@ const Main = ({ children, router }: MainProps) => {
           px="4"
           bg="white"
           _dark={{
-            bg: 'gray.800'
+            bg: 'gray.700'
           }}
           borderBottomWidth="1px"
           color="inherit"

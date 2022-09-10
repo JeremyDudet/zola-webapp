@@ -2,13 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures=["referentialIntegrity"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
@@ -23,21 +23,48 @@ datasource db {
 // must exist. For example, if a Post model defines an author, then 
 // the author must also exist.“ 
 
-model Users {
-  id        String @id @default(cuid())
-  firstName String
-  lastName  String
-  alias     String 
-  password  String
+model User {
+  id            String   @id @default(cuid())
+  firstName    String
+  lastName     String
+  alias         String
+  password      String @unique
+  auth          Auth     @default(user)
 
-  @@unique([firstName, lastName])
+  @@unique([firstName, lastName, password])
 }
 
-model Tasks {
-  id           String   @id @default(cuid())
-  title        String
-  description  String
-  status       String
-  createdAt    DateTime @default(now())
-  lastEditedAt DateTime @updatedAt
+model Task {
+  id             String   @id @default(cuid())
+  title          String
+  description    String
+  status         String
+  author_id      String
+  created_at     DateTime @default(now())
+  last_edited_at DateTime @updatedAt
+  roles          Role[]
+}
+
+model Role {
+  id             String   @id @default(cuid())
+  name           String
+  description    String
+  created_at     DateTime @default(now())
+  last_edited_at DateTime @updatedAt
+  tasks          Task[]
+}
+
+model Day {
+  id              String   @id @default(cuid())
+  starting_covers Int
+  ending_covers   Int
+  date            DateTime @default(now())
+  total_sales     Int
+}
+
+enum Auth {
+  user
+  admin
+  kitchen
+  bar
 }

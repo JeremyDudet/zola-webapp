@@ -2,7 +2,7 @@
 import { withTRPC } from '@trpc/next'
 import type { AppRouter } from '../server/router'
 import { ChakraProvider } from '@chakra-ui/react'
-import { UserProvider } from '../context/UserContext'
+import { AuthProvider } from '../context/AuthContext'
 import Layout from '../components/layouts/main'
 import Fonts from '../components/fonts'
 import ClientOnly from '../components/ClientOnly'
@@ -24,13 +24,13 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
   return (
     <ChakraProvider theme={theme}>
       <Fonts />
-      <UserProvider>
+      <AuthProvider>
         <ClientOnly>
           <Layout router={router}>
             <Component {...pageProps} key={router.route} />
           </Layout>
         </ClientOnly>
-      </UserProvider>
+      </AuthProvider>
     </ChakraProvider>
   )
 }
