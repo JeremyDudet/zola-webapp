@@ -1,19 +1,32 @@
+/*
+  [x] If the user clicks on Edit, a modal will pop up with a form to edit the user.
+    If the user clicks Save, the user will be updated in the database,
+    and the page will refresh.
+
+  []  Update User
+*/
+
 import React, { useRef } from 'react'
 import {
   Flex,
   Box,
   Image,
-  chakra,
   Heading,
   Center,
   Button,
   useDisclosure,
-  Text
+  Table,
+  Tbody,
+  Tr,
+  Td
 } from '@chakra-ui/react'
 import AlertDeleteUser from './AlertDeleteUserModal'
+import UpdateUserModal from './UpdateUserModal'
 import { User } from '../types'
 
 interface Props {
+  handleUserDelete: (uid: string) => void
+  handleUserUpdate: (data: User) => void
   setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>
   uid: string
   firstName: string
@@ -24,6 +37,8 @@ interface Props {
 }
 
 function UserCard({
+  handleUserDelete,
+  handleUserUpdate,
   setUsers,
   uid,
   firstName,
@@ -33,20 +48,44 @@ function UserCard({
   auth
 }: Props) {
   const image = ''
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isUpdateOpen,
+    onOpen: onUpdateOpen,
+    onClose: onUpdateClose
+  } = useDisclosure()
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose
+  } = useDisclosure()
   const cancelRef = useRef(null)
+
+  const capitalize = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  }
 
   return (
     <>
       <AlertDeleteUser
+        handleUserDelete={handleUserDelete}
         setUsers={setUsers}
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isDeleteOpen}
+        onClose={onDeleteClose}
         cancelRef={cancelRef}
         uid={uid}
       />
-
-      <Flex p={50} w="full" alignItems="center" justifyContent="center">
+      <UpdateUserModal
+        handleUserUpdate={handleUserUpdate}
+        uid={uid}
+        firstName={firstName}
+        lastName={lastName}
+        alias={alias}
+        password={password}
+        authLevel={auth}
+        isOpen={isUpdateOpen}
+        onClose={onUpdateClose}
+      />
+      <Flex p={38} w="full" alignItems="center" justifyContent="center">
         <Box
           w="md"
           mx="auto"
@@ -102,73 +141,54 @@ function UserCard({
               </Center>
             )}
           </Flex>
-
-          <Heading
-            color="gray.800"
-            _dark={{
-              color: 'white'
-            }}
-            fontSize={{
-              base: '2xl',
-              md: '3xl'
-            }}
-            mt={{
-              base: 2,
-              md: 0
-            }}
-            fontWeight="bold"
-          >
-            {alias ? `${alias}` : `${firstName} ${lastName}`}
-          </Heading>
-
-          <Text
-            mt={2}
-            color="gray.600"
-            _dark={{
-              color: 'gray.200'
-            }}
-          >
-            <>{`First Name: ` + firstName}</>
-          </Text>
-          <Text
-            mt={2}
-            color="gray.600"
-            _dark={{
-              color: 'gray.200'
-            }}
-          >
-            <>{`Last Name: ` + lastName}</>
-          </Text>
-          <Text
-            mt={2}
-            color="gray.600"
-            _dark={{
-              color: 'gray.200'
-            }}
-          >
-            {alias ? <>{`Alias: ` + alias}</> : 'Alias: N/A'}
-          </Text>
-          <chakra.p
-            mt={2}
-            color="gray.600"
-            _dark={{
-              color: 'gray.200'
-            }}
-          >
-            {`Password: ${password}`}
-          </chakra.p>
-          <chakra.p
-            mt={2}
-            color="gray.600"
-            _dark={{
-              color: 'gray.200'
-            }}
-          >
-            {`Authorization: ${auth}`}
-          </chakra.p>
+          <Center>
+            <Heading
+              color="gray.800"
+              _dark={{
+                color: 'white'
+              }}
+              fontSize={{
+                base: '2xl',
+                md: '3xl'
+              }}
+              mt={{
+                base: 2,
+                md: 0
+              }}
+              fontWeight="bold"
+            >
+              {alias ? `${alias}` : `${firstName} ${lastName}`}
+            </Heading>
+          </Center>
+          <Table variant="simple" size="sm">
+            <Tbody>
+              <Tr>
+                <Td>First</Td>
+                <Td>{firstName}</Td>
+              </Tr>
+              <Tr>
+                <Td>Last</Td>
+                <Td>{lastName}</Td>
+              </Tr>
+              <Tr>
+                <Td>Alias</Td>
+                <Td>{alias}</Td>
+              </Tr>
+              <Tr>
+                <Td>Password</Td>
+                <Td>{password}</Td>
+              </Tr>
+              <Tr>
+                <Td>Authorization</Td>
+                <Td>{capitalize(auth)}</Td>
+              </Tr>
+            </Tbody>
+          </Table>
           <Flex mt={4} justifyContent="space-between">
-            <Button colorScheme="facebook">Update</Button>
-            <Button colorScheme="red" onClick={onOpen}>
+            <Button colorScheme="blue" onClick={onUpdateOpen}>
+              Update
+            </Button>
+            <Button colorScheme="red" onClick={onDeleteOpen}>
               Delete
             </Button>
           </Flex>

@@ -1,7 +1,5 @@
 import { createRouter } from './context'
 import { z } from 'zod'
-import { prisma } from '../db/client'
-import { Prisma } from '@prisma/client'
 
 // export const userRouter = createRouter()
 //   .query('getAll', {
@@ -16,13 +14,11 @@ import { Prisma } from '@prisma/client'
 
 // Here we are creating a query to get a user by their id.
 
+
 export const usersRouter = createRouter()
   .query("getUsers", {
-    input: z.object({
-      id: z.string().nullish(),
-    }).nullish(),
-    async resolve() {
-      return await prisma.user.findMany();
+    async resolve({ ctx }) {
+      return await ctx.prisma.user.findMany();
     }
   })
   .mutation("deleteUser", {
@@ -30,24 +26,52 @@ export const usersRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ ctx, input }) {
-      try {
-        const deletedUser = await ctx.prisma.user.delete({
-          where: {
-            id: input?.id,
-          },
-        })
-        console.log(deletedUser)
-      } catch (error) {
-        if (
-          error instanceof Prisma.PrismaClientKnownRequestError &&
-          error.code === "P2025"
-        ) {
-          throw new Error("No user found with that id")
-        } {
-          
-        }
+      await ctx.prisma.user.delete({
+        where: {
+          id: input.id,
+        },
       }
-      return true
+    )
+  }
+  })
+  .mutation("createUser", {
+    // validate input with Zod
+    input: z.object({ 
+      firstName: z.string(), 
+      lastName: z.string(), 
+      alias: z.string(), 
+      password: z.string().max(4), 
+      auth: z.string()
+    }),
+    async resolve({ ctx, input }) {
+      await ctx.prisma.user.create({
+        data: {
+          firstName: input.firstName,
+          lastName: input.lastName,
+          alias: input.alias,
+          password: input.password,
+          auth: input.auth
+        },
+      })    
+    }
+  })
+  .mutation("updateUser", {
+    input: z.object({id: z.string(), firstName: z.string(), lastName: z.string(), alias: z.string(), password: z.string(), auth: z.string() }),
+    async resolve({ ctx, input }) {
+      // update a user in the database based on the id
+      const user = await ctx.prisma.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          firstName: input.firstName,
+          lastName: input.lastName,
+          alias: input.alias,
+          password: input.password,
+          auth: input.auth
+        },
+      })
+      return user
     }
   })
 

@@ -23,13 +23,20 @@ datasource db {
 // must exist. For example, if a Post model defines an author, then 
 // the author must also exist.“ 
 
+enum Auth {
+  user
+  admin
+  kitchen
+  bar
+}
+
 model User {
   id            String   @id @default(cuid())
   firstName    String
   lastName     String
   alias         String
   password      String @unique
-  auth          Auth     @default(user)
+  auth          String @default("user")
 
   @@unique([firstName, lastName, password])
 }
@@ -62,9 +69,4 @@ model Day {
   total_sales     Int
 }
 
-enum Auth {
-  user
-  admin
-  kitchen
-  bar
-}
+

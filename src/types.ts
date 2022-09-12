@@ -7,6 +7,14 @@ export interface User {
   auth: string
 }
 
+export interface NewUser {
+  firstName: string
+  lastName: string
+  alias: string
+  password: string
+  auth: string
+}
+
 export interface Task {
   id: string
   title: string

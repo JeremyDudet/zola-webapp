@@ -8,11 +8,12 @@ import {
   AlertDialogContent,
   AlertDialogOverlay
 } from '@chakra-ui/react'
-import { MutableRefObject, useEffect } from 'react'
+import { MutableRefObject } from 'react'
 import { trpc } from '../utils/trpc'
 import { User } from '../types'
 
 interface Props {
+  handleUserDelete: (uid: string) => void
   setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>
   uid: string
   isOpen: boolean
@@ -21,27 +22,16 @@ interface Props {
 }
 
 export default function AlertDeleteUser({
-  setUsers,
+  handleUserDelete,
   uid,
   isOpen,
   onClose,
   cancelRef
 }: Props) {
-  const deleteUserMutation = trpc.useMutation('user.deleteUser')
-  const userQuery = trpc.useQuery(['user.getUsers'])
-  const router = useRouter()
-
-  const handleDelete = async () => {
-    setUsers(userQuery.data)
-    deleteUserMutation.mutate({ id: uid })
-    router.reload()
+  const onDelete = () => {
+    handleUserDelete(uid)
+    onClose()
   }
-
-  useEffect(() => {
-    if (deleteUserMutation.isSuccess) {
-      setUsers(userQuery.data)
-    }
-  }, [deleteUserMutation.isSuccess, userQuery.data, setUsers])
 
   return (
     <AlertDialog
@@ -52,7 +42,7 @@ export default function AlertDeleteUser({
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Delete Customer
+            Delete User
           </AlertDialogHeader>
 
           <AlertDialogBody>
@@ -63,7 +53,7 @@ export default function AlertDeleteUser({
             <Button ref={cancelRef} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="red" onClick={handleDelete} ml={3}>
+            <Button colorScheme="red" onClick={onDelete} ml={3}>
               Delete
             </Button>
           </AlertDialogFooter>

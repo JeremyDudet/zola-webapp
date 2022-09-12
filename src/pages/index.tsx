@@ -3,6 +3,7 @@
   It is the first page that users see when they open the website.
   This will hold a few dashboard for 
 */
+
 import { Heading } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { trpc } from '../utils/trpc'

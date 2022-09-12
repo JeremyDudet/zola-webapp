@@ -25,7 +25,8 @@
     "src/components/layouts/main.js",
     "src/components/layouts/main.js",
     "src/lib/theme.js",
-    "prettier.config.js"
+    "prettier.config.js",
+    "src/components/AddUserModal.jsx"
   ],
   "exclude": ["node_modules"]
 }
