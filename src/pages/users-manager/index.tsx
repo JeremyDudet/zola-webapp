@@ -107,14 +107,32 @@ export default function Index() {
     [createUser, utils]
   )
 
+  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setAuthFilter(e.target.value)
+  }
+
   const filteredUsers = users?.filter(user => {
     if (authFilter === 'all') return true
     return user.auth === authFilter
   })
 
-  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    setAuthFilter(e.target.value)
+  const liveSearch = () => {
+    return filteredUsers?.filter(user => {
+      const firstName = user.firstName.toLowerCase()
+      const lastName = user.lastName.toLowerCase()
+      const alias = user.alias.toLowerCase()
+      const password = user.password.toLowerCase()
+      const searchWords = search.toLowerCase().split(' ')
+      return searchWords.every(word => {
+        return (
+          firstName.includes(word) ||
+          lastName.includes(word) ||
+          alias.includes(word) ||
+          password.includes(word)
+        )
+      })
+    })
   }
 
   return (
@@ -132,7 +150,7 @@ export default function Index() {
           </Button>
         </Flex>
         <SearchBar search={search} setSearch={setSearch} />
-        <FormControl bg="gray.100" rounded="lg">
+        <FormControl pb={8} rounded="lg">
           <FormLabel as="legend">Filter by Authorization Level:</FormLabel>
           <RadioGroup defaultValue="all">
             <HStack spacing="12px">
@@ -175,7 +193,7 @@ export default function Index() {
           </RadioGroup>
         </FormControl>
         {users &&
-          filteredUsers?.map(user => (
+          liveSearch()?.map(user => (
             <UserCard
               key={user.id}
               handleUserDelete={handleUserDelete}

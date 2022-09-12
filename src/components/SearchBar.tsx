@@ -16,7 +16,7 @@ function SearchBar({ search, setSearch }: Props) {
         </InputLeftElement>
         <Input
           value={search}
-          placeholder="Search Users"
+          placeholder="Search by name, alias, or password"
           onChange={e => setSearch(e.target.value)}
         />
       </InputGroup>
