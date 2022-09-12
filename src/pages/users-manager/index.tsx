@@ -37,7 +37,18 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { trpc } from '../../utils/trpc'
-import { Heading, Stack, Flex, Button, useDisclosure } from '@chakra-ui/react'
+import {
+  Heading,
+  HStack,
+  Stack,
+  Flex,
+  Button,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio
+} from '@chakra-ui/react'
 import SearchBar from '../../components/SearchBar'
 import UserCard from '../../components/UserCard'
 import NewUserModal from '../../components/NewUserModal'
@@ -49,6 +60,7 @@ export default function Index() {
   const getUsers = trpc.useQuery(['user.getUsers'])
   const updateUser = trpc.useMutation('user.updateUser')
   const deleteUser = trpc.useMutation('user.deleteUser')
+  const [authFilter, setAuthFilter] = useState<string>('all')
   const [search, setSearch] = useState<string>('')
   const [users, setUsers] = useState<User[] | undefined>()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -95,6 +107,16 @@ export default function Index() {
     [createUser, utils]
   )
 
+  const filteredUsers = users?.filter(user => {
+    if (authFilter === 'all') return true
+    return user.auth === authFilter
+  })
+
+  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setAuthFilter(e.target.value)
+  }
+
   return (
     <>
       <NewUserModal
@@ -110,8 +132,50 @@ export default function Index() {
           </Button>
         </Flex>
         <SearchBar search={search} setSearch={setSearch} />
+        <FormControl bg="gray.100" rounded="lg">
+          <FormLabel as="legend">Filter by Authorization Level:</FormLabel>
+          <RadioGroup defaultValue="all">
+            <HStack spacing="12px">
+              <Radio
+                value="all"
+                checked={authFilter === 'all'}
+                onChange={handleOptionChange}
+              >
+                All
+              </Radio>
+              <Radio
+                value="user"
+                checked={authFilter === 'user'}
+                onChange={handleOptionChange}
+              >
+                User
+              </Radio>
+              <Radio
+                value="bar"
+                checked={authFilter === 'bar'}
+                onChange={handleOptionChange}
+              >
+                Bar
+              </Radio>
+              <Radio
+                value="kitchen"
+                checked={authFilter === 'kitchen'}
+                onChange={handleOptionChange}
+              >
+                Kitchen
+              </Radio>
+              <Radio
+                value="admin"
+                checked={authFilter === 'admin'}
+                onChange={handleOptionChange}
+              >
+                Admin
+              </Radio>
+            </HStack>
+          </RadioGroup>
+        </FormControl>
         {users &&
-          users.map(user => (
+          filteredUsers?.map(user => (
             <UserCard
               key={user.id}
               handleUserDelete={handleUserDelete}
