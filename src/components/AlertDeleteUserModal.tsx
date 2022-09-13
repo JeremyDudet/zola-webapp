@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import {
   Button,
   AlertDialog,
@@ -9,7 +8,6 @@ import {
   AlertDialogOverlay
 } from '@chakra-ui/react'
 import { MutableRefObject } from 'react'
-import { trpc } from '../utils/trpc'
 import { User } from '../types'
 
 interface Props {

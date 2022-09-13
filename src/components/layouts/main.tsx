@@ -18,12 +18,12 @@ import { BsCheck2Square } from 'react-icons/bs'
 import { BiFoodMenu, BiChair, BiEdit } from 'react-icons/bi'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { useDisclosure, useColorModeValue } from '@chakra-ui/react'
-import { FaBell } from 'react-icons/fa'
-import { MdHome } from 'react-icons/md'
+import { FaBell, FaCocktail } from 'react-icons/fa'
+import { MdHome, MdLiquor } from 'react-icons/md'
 import { ImShuffle } from 'react-icons/im'
 import { Router } from 'next/router'
 import { IconType } from 'react-icons'
-import { userAgent } from 'next/server'
+import { IoIosWine, IoIosBeer } from 'react-icons/io'
 
 // todo
 // [x] add logout button
@@ -201,21 +201,45 @@ const Main = ({ children, router }: MainProps) => {
         <NavItem icon={BsCheck2Square} path={path} href="/tasks">
           Tasks
         </NavItem>
-        <NavItem icon={BiFoodMenu} path={path} href="/food-notes">
-          Food Notes
-        </NavItem>
         <NavItem icon={BiChair} path={path} href="/seating-charts">
           Seating Charts
         </NavItem>
-        <SidebarHeading>Applications</SidebarHeading>
-        <NavItem icon={BiEdit} path={path} href="/food-notes-manager">
-          Food Notes Manager
+        <NavItem icon={BiFoodMenu} path={path} href="/food-notes">
+          Food
         </NavItem>
+        <NavItem icon={IoIosWine} path={path} href="/wine-notes">
+          Wine
+        </NavItem>
+        <NavItem icon={FaCocktail} path={path} href="/cocktail-notes">
+          Cocktails
+        </NavItem>
+        <NavItem icon={IoIosBeer} path={path} href="/beer-notes">
+          Beer
+        </NavItem>
+        <NavItem icon={MdLiquor} path={path} href="/spirits-notes">
+          {'Spirits & Liqueurs'}
+        </NavItem>
+        <SidebarHeading>Admin Applications</SidebarHeading>
         <NavItem icon={BiEdit} path={path} href="/tasks-manager">
-          Task Manager
+          Tasks
+        </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/food-notes-manager">
+          Food
+        </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/wine-notes-manager">
+          Wine
+        </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/cocktail-notes-manager">
+          Cocktails
+        </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/beer-notes-manager">
+          Beer
+        </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/spirits-notes-manager">
+          {'Spirits & Liqueurs'}
         </NavItem>
         <NavItem icon={BiEdit} path={path} href="/users-manager">
-          Users Manager
+          Users
         </NavItem>
         <SidebarHeading>Settings</SidebarHeading>
         <SwitchUser icon={ImShuffle} />

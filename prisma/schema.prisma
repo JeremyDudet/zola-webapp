@@ -23,7 +23,7 @@ datasource db {
 // must exist. For example, if a Post model defines an author, then 
 // the author must also exist.“ 
 
-enum Auth {
+enum Auth { // enum is a type that can be one of several possible values
   user
   admin
   kitchen
@@ -41,7 +41,7 @@ model User {
   @@unique([firstName, lastName, password])
 }
 
-model TaskPriority {
+model TaskPriority { // this is a lookup table
   id            String   @id @default(cuid())
   name          String
   description   String
@@ -54,7 +54,10 @@ model Task {
   description    String
   created_at     DateTime @default(now())
   last_edited_at DateTime @updatedAt
-  priority       TaskPriority @relation(fields: [priorityId], references: [id])
+  priority       TaskPriority @relation(fields: [taskPriorityId], references: [id])
+  taskPriorityId String
+  assigned_to    Role @relation(fields: [roleID], references: [id])
+  roleID         String
 }
 
 model Role {

@@ -43,7 +43,6 @@ import {
   Radio,
   VStack,
   FormHelperText,
-  Text,
   Table,
   Tbody,
   Tr,
