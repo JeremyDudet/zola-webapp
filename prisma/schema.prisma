@@ -41,15 +41,20 @@ model User {
   @@unique([firstName, lastName, password])
 }
 
+model TaskPriority {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  tasks         Task[]
+}
+
 model Task {
   id             String   @id @default(cuid())
   title          String
   description    String
-  status         String
-  author_id      String
   created_at     DateTime @default(now())
   last_edited_at DateTime @updatedAt
-  roles          Role[]
+  priority       TaskPriority @relation(fields: [priorityId], references: [id])
 }
 
 model Role {

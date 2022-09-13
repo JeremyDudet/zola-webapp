@@ -11,7 +11,8 @@ import {
   DrawerContent,
   Link,
   IconButton,
-  Text
+  Text,
+  Center
 } from '@chakra-ui/react'
 import { BsCheck2Square } from 'react-icons/bs'
 import { BiFoodMenu, BiChair, BiEdit } from 'react-icons/bi'
@@ -22,9 +23,11 @@ import { MdHome } from 'react-icons/md'
 import { ImShuffle } from 'react-icons/im'
 import { Router } from 'next/router'
 import { IconType } from 'react-icons'
+import { userAgent } from 'next/server'
 
 // todo
-// [] add logout button
+// [x] add logout button
+// [] fix the drawer opening on large screens
 
 interface MainProps {
   children: React.ReactNode
@@ -53,6 +56,12 @@ const Main = ({ children, router }: MainProps) => {
   const color = useColorModeValue('gray.600', 'gray.300')
 
   const SwitchUser = ({ icon }: IconProps) => {
+    const onLogOut = () => {
+      // close sidebar
+      sidebar.onClose()
+      // log out user
+      logOut()
+    }
     return (
       <Box p={2}>
         <Flex
@@ -77,7 +86,7 @@ const Main = ({ children, router }: MainProps) => {
           role="group"
           fontWeight="semibold"
           transition=".15s ease"
-          onClick={() => logOut()}
+          onClick={onLogOut}
         >
           {icon && (
             <Icon
@@ -127,7 +136,7 @@ const Main = ({ children, router }: MainProps) => {
               role="group"
               fontWeight="semibold"
               transition=".15s ease"
-              onClick={sidebar.onToggle}
+              onClick={sidebar.onClose}
             >
               {icon && (
                 <Icon
@@ -216,6 +225,8 @@ const Main = ({ children, router }: MainProps) => {
 
   // check if there is a logged in user
   // if not, hide the sidebar
+
+  if (!user.firstName) return <Center pt={8}>{children}</Center>
 
   return (
     <Box

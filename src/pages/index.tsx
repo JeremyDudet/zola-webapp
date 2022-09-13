@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   const { user } = useAuthContext()
   const userQuery = trpc.useQuery(['user.getUsers'])
 
-  if (!user.first_name) return <Auth /> // if user is not logged in, return Auth component
+  if (!user.firstName) return <Auth /> // if user is not logged in, return Auth component
 
   return (
     <>

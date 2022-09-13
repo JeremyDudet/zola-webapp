@@ -130,7 +130,7 @@ export default function Auth() {
               </Text>
             </PopoverBody>
             <PopoverFooter>
-              <Text>{"If your password doesn't work, me know 🙏"}</Text>
+              <Text>{"If your password doesn't work, let me know. 🙏"}</Text>
               <Text float="right">- Jeremy</Text>
             </PopoverFooter>
           </PopoverContent>
