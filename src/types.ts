@@ -17,16 +17,57 @@ export interface NewUser {
 
 export interface Task {
   id: string
-  title: string
+  name: string
   description: string
+  taskPriorityId: string
+  roleId: string
+  status: string
+}
+
+export interface NewTask {
+  name: string
+  description: string
+  taskPriorityId: string
+  roleId: string
+  status: string
 }
 
 export interface Day {
   id: string
-  starting_covers: number
-  ending_covers: number
+  startingCovers: number
+  endingCovers: number
   date: Date
-  total_sales: number
-  people_staffed: User[]
-  tasks_completed: Task[]
+  totalSales: number
+  peopleStaffed: User[]
+  tasksCompleted: Task[]
+}
+
+export interface Priority {
+  id: string
+  name: string
+  description: string
+}
+
+export interface Role {
+  id: string
+  name: string
+  description: string
+  department: Department
+}
+
+export interface NewRole {
+  name: string
+  description: string
+  department: Department
+}
+
+export interface Department {
+  id: string
+  name: string
+  description: string
+}
+
+export interface NewDepartment {
+  name: string
+  description: string
 }

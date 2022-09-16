@@ -20,7 +20,7 @@ import {
   Tr,
   Td
 } from '@chakra-ui/react'
-import AlertDeleteUser from './AlertDeleteUserModal'
+import AlertDelete from './AlertDeleteModal'
 import UpdateUserModal from './UpdateUserModal'
 import { User } from '../types'
 
@@ -66,13 +66,14 @@ function UserCard({
 
   return (
     <>
-      <AlertDeleteUser
-        handleUserDelete={handleUserDelete}
+      <AlertDelete
+        handleDelete={handleUserDelete}
         setUsers={setUsers}
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         cancelRef={cancelRef}
-        uid={uid}
+        id={uid}
+        actionDescriptor="Delete User"
       />
       <UpdateUserModal
         handleUserUpdate={handleUserUpdate}

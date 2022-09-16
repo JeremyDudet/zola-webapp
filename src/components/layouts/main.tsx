@@ -1,3 +1,19 @@
+// todo
+// [x] add logout button
+// [x] fix the drawer opening on large screens
+
+/* 
+  This is the main layout for the app.
+
+  [x] This layout is used in all pages.
+
+  [x] It contains the header, sidebar, and footer.
+  [x] It also contains the drawer for mobile screens.
+  [x] Children components are rendered inside the main content area.
+
+  [] Depending on user Authorization: 
+      some Admin links are shown in the sidebar.
+*/
 import Logo from '../Logo'
 import NextLink from 'next/link'
 import ThemeToggleButton from '../theme-toggle-button'
@@ -24,10 +40,7 @@ import { ImShuffle } from 'react-icons/im'
 import { Router } from 'next/router'
 import { IconType } from 'react-icons'
 import { IoIosWine, IoIosBeer } from 'react-icons/io'
-
-// todo
-// [x] add logout button
-// [] fix the drawer opening on large screens
+import { RiTeamFill } from 'react-icons/ri'
 
 interface MainProps {
   children: React.ReactNode
@@ -198,6 +211,9 @@ const Main = ({ children, router }: MainProps) => {
           Home
         </NavItem>
         <SidebarHeading>Information</SidebarHeading>
+        <NavItem icon={RiTeamFill} path={path} href="/tasks">
+          Roles
+        </NavItem>
         <NavItem icon={BsCheck2Square} path={path} href="/tasks">
           Tasks
         </NavItem>
@@ -240,6 +256,9 @@ const Main = ({ children, router }: MainProps) => {
         </NavItem>
         <NavItem icon={BiEdit} path={path} href="/users-manager">
           Users
+        </NavItem>
+        <NavItem icon={BiEdit} path={path} href="/roles-manager">
+          Roles
         </NavItem>
         <SidebarHeading>Settings</SidebarHeading>
         <SwitchUser icon={ImShuffle} />
@@ -307,7 +326,7 @@ const Main = ({ children, router }: MainProps) => {
             </Box>
           </Box>
           <Flex align="center" gap={2}>
-            <Icon color="gray.500" as={FaBell} cursor="pointer" />
+            {/* <Icon color="gray.500" as={FaBell} cursor="pointer" /> */}
             <ThemeToggleButton />
             <IconButton
               aria-label="Open Menu"
@@ -319,8 +338,7 @@ const Main = ({ children, router }: MainProps) => {
             />
           </Flex>
         </Flex>
-
-        <Box as="main" p="4">
+        <Box as="main" mx="auto" p="4" maxW="container.lg" m>
           {children}
         </Box>
       </Box>

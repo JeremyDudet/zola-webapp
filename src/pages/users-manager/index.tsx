@@ -168,7 +168,11 @@ export default function Index() {
             New User
           </Button>
         </Flex>
-        <SearchBar search={search} setSearch={setSearch} />
+        <SearchBar
+          search={search}
+          setSearch={setSearch}
+          placeholder="Search by name, alias, or password"
+        />
         <FormControl pb={8} rounded="lg">
           <Flex alignItems="center" pb="1">
             <FormLabel as="legend">Filter by Authorization Level:</FormLabel>

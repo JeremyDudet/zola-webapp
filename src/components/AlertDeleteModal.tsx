@@ -8,26 +8,26 @@ import {
   AlertDialogOverlay
 } from '@chakra-ui/react'
 import { MutableRefObject } from 'react'
-import { User } from '../types'
 
 interface Props {
-  handleUserDelete: (uid: string) => void
-  setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>
-  uid: string
+  handleDelete: (uid: string) => void
+  id: string
   isOpen: boolean
   onClose: () => void
   cancelRef: MutableRefObject<null>
+  actionDescriptor: string
 }
 
-export default function AlertDeleteUser({
-  handleUserDelete,
-  uid,
+export default function AlertDelete({
+  handleDelete,
+  id,
   isOpen,
   onClose,
-  cancelRef
+  cancelRef,
+  actionDescriptor
 }: Props) {
   const onDelete = () => {
-    handleUserDelete(uid)
+    handleDelete(id)
     onClose()
   }
 
@@ -40,7 +40,7 @@ export default function AlertDeleteUser({
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Delete User
+            {actionDescriptor}
           </AlertDialogHeader>
 
           <AlertDialogBody>

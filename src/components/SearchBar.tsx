@@ -5,9 +5,10 @@ import { SearchIcon } from '@chakra-ui/icons'
 interface Props {
   search: string
   setSearch: React.Dispatch<React.SetStateAction<string>>
+  placeholder?: string
 }
 
-function SearchBar({ search, setSearch }: Props) {
+function SearchBar({ search, setSearch, placeholder }: Props) {
   return (
     <Stack>
       <InputGroup>
@@ -16,7 +17,7 @@ function SearchBar({ search, setSearch }: Props) {
         </InputLeftElement>
         <Input
           value={search}
-          placeholder="Search by name, alias, or password"
+          placeholder={placeholder}
           onChange={e => setSearch(e.target.value)}
         />
       </InputGroup>
