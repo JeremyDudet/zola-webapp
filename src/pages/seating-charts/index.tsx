@@ -1,5 +1,5 @@
 import React from 'react'
-import Auth from '../../components/Auth'
+import LoginForm from '../../components/LoginForm'
 import Image from 'next/image'
 import { Box, Heading } from '@chakra-ui/react'
 import { useAuthContext } from '../../context/AuthContext' // import User state
@@ -13,7 +13,7 @@ import outdoor_map from '../../../images/outdoor-map.png'
 export default function Index() {
   const { user } = useAuthContext()
 
-  if (!user.firstName) return <Auth />
+  if (!user.firstName) return <LoginForm />
 
   return (
     <Box display="flex" flexDirection="column" mt={10} gap="2rem">

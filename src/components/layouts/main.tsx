@@ -34,13 +34,12 @@ import { BsCheck2Square } from 'react-icons/bs'
 import { BiFoodMenu, BiChair, BiEdit } from 'react-icons/bi'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { useDisclosure, useColorModeValue } from '@chakra-ui/react'
-import { FaBell, FaCocktail } from 'react-icons/fa'
+import { FaCocktail } from 'react-icons/fa'
 import { MdHome, MdLiquor } from 'react-icons/md'
 import { ImShuffle } from 'react-icons/im'
 import { Router } from 'next/router'
 import { IconType } from 'react-icons'
 import { IoIosWine, IoIosBeer } from 'react-icons/io'
-import { RiTeamFill } from 'react-icons/ri'
 
 interface MainProps {
   children: React.ReactNode
@@ -198,7 +197,7 @@ const Main = ({ children, router }: MainProps) => {
       w="60"
     >
       <Flex px="4" py="5" align="center">
-        <Logo />
+        <Logo onClose={sidebar.onClose} />
       </Flex>
       <Flex
         direction="column"
@@ -211,9 +210,6 @@ const Main = ({ children, router }: MainProps) => {
           Home
         </NavItem>
         <SidebarHeading>Information</SidebarHeading>
-        <NavItem icon={RiTeamFill} path={path} href="/tasks">
-          Roles
-        </NavItem>
         <NavItem icon={BsCheck2Square} path={path} href="/tasks">
           Tasks
         </NavItem>
@@ -235,29 +231,11 @@ const Main = ({ children, router }: MainProps) => {
         <NavItem icon={MdLiquor} path={path} href="/spirits-notes">
           {'Spirits & Liqueurs'}
         </NavItem>
-        <SidebarHeading>Admin Applications</SidebarHeading>
-        <NavItem icon={BiEdit} path={path} href="/tasks-manager">
-          Tasks
-        </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/food-notes-manager">
-          Food
-        </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/wine-notes-manager">
-          Wine
-        </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/cocktail-notes-manager">
-          Cocktails
-        </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/beer-notes-manager">
-          Beer
-        </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/spirits-notes-manager">
-          {'Spirits & Liqueurs'}
-        </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/users-manager">
+        <SidebarHeading>Admin</SidebarHeading>
+        <NavItem icon={BiEdit} path={path} href="/users/admin">
           Users
         </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/roles-manager">
+        <NavItem icon={BiEdit} path={path} href="/roles/admin">
           Roles
         </NavItem>
         <SidebarHeading>Settings</SidebarHeading>
@@ -322,7 +300,7 @@ const Main = ({ children, router }: MainProps) => {
                 md: 'none'
               }}
             >
-              <Logo />
+              <Logo onClose={sidebar.onClose} />
             </Box>
           </Box>
           <Flex align="center" gap={2}>

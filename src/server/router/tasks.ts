@@ -15,17 +15,18 @@ import { z } from 'zod'
 // Here we are creating a query to get a user by their id.
 
 // model Task {
-//     id             String   @id @default(cuid())
-//     name          String
-//     description    String
-//     createdAt     DateTime @default(now())
-//     lastEdited DateTime @updatedAt
-//     priority       TaskPriority @relation(fields: [taskPriorityId], references: [id])
-//     taskPriorityId String // this is the foreign key
-//     assignedTo    Role @relation(fields: [roleId], references: [id]) // a task can only be assigned to one role
-//     roleId         String // this is the foreign key
-//     status         TaskStatus  // a task can only have one status
-//   }
+//   id             String   @id @default(cuid())
+//   name           String
+//   description    String
+
+//   createdAt      DateTime @default(now())
+//   lastEdited     DateTime @updatedAt
+
+//   priority       String
+
+//   assignedTo     Role     @relation(fields: [assignedToId], references: [id]) // a task can only be assigned to one role
+//   assignedToId   String
+// }
   
 
 export const tasksRouter = createRouter()
@@ -54,18 +55,16 @@ export const tasksRouter = createRouter()
     input: z.object({ 
       name: z.string(), 
       description: z.string(), 
-      taskPriorityId: z.string(),
-      roleId: z.string(),
-      status: z.string()
+      priority: z.string(),
+      assignedToId: z.string()
     }),
     async resolve({ ctx, input }) {
       await ctx.prisma.task.create({
         data: {
             name: input.name,
             description: input.description,
-            taskPriorityId: input.taskPriorityId,
-            roleId: input.roleId,
-            status: input.status
+            priority: input.priority,
+            assignedToId: input.assignedToId,
         },
       })  
     }

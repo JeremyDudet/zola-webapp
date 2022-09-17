@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import NextLink from 'next/link'
 import Image from 'next/image'
 import { useColorModeValue } from '@chakra-ui/react'
 import barzolaBlack from '../../images/barzola-logo-black.png'
@@ -17,13 +17,21 @@ const LogoBox = styled.span`
   padding-top: 5px;
 `
 
-const Logo = () => {
+interface Props {
+  onClose: () => void
+}
+
+const Logo = ({ onClose }: Props) => {
   return (
     <LogoBox>
-      <Image
-        src={useColorModeValue(barzolaBlack, barzolaWhite)}
-        alt="BarZola"
-      />
+      <NextLink href="/">
+        <Image
+          src={useColorModeValue(barzolaBlack, barzolaWhite)}
+          alt="BarZola"
+          style={{ cursor: 'pointer' }}
+          onClick={onClose}
+        />
+      </NextLink>
     </LogoBox>
   )
 }

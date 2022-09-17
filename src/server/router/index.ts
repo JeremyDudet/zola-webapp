@@ -11,8 +11,8 @@ import { tasksRouter } from './tasks'
 
 export const appRouter = createRouter() // centralized point for all of our resolvers
   .transformer(superjson)
-  .merge("user.", usersRouter) // merge the user router into the app router
-  .merge("task.", tasksRouter) // merge the task router into the app router
+  .merge("users.", usersRouter) // merge the user router into the app router
+  .merge("tasks.", tasksRouter) // merge the task router into the app router
   
 // export type definition of API
 export type AppRouter = typeof appRouter

@@ -15,7 +15,7 @@ and then the client-side will render the original page they were on.
 
 */
 
-import { useState, useRef } from 'react'
+import { useState, useRef, forwardRef } from 'react'
 import { trpc } from '../utils/trpc'
 import { ArrowRightIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 import {
@@ -48,15 +48,24 @@ import { useAuthContext } from '../context/AuthContext'
 // [] if it does, login new user through context
 // [] fix input delete bug
 
-export default function Auth() {
+export default function LoginForm() {
   const toast = useToast() // for toast notifications
   const { onOpen, onClose, isOpen } = useDisclosure() // for popover
   const passwordInput = useRef<HTMLInputElement>(null) // password input ref
   const [password, setPassword] = useState<string>('') // password state
   const { changeUser } = useAuthContext() // change user context
 
+  // forwardRef()
+  const RefInputField = forwardRef<HTMLInputElement>((props, ref) => (
+    <PinInputField ref={ref} />
+  ))
+  // setting display name for forwardRef() component
+  // is good for debugging , since it means that it will print
+  // your component's displayNme property in the React DevTools
+  RefInputField.displayName = 'RefInputField'
+
   // fetch array of user objects from database
-  const userQuery = trpc.useQuery(['user.getUsers'])
+  const userQuery = trpc.useQuery(['users.getUsers'])
   console.log('userQuery', userQuery.data)
 
   // use this to check if password matches a user's password
@@ -145,7 +154,7 @@ export default function Auth() {
           value={password}
           onChange={value => setPassword(value)}
         >
-          <PinInputField ref={passwordInput} />
+          <RefInputField ref={passwordInput} />
           <PinInputField />
           <PinInputField />
           <PinInputField />

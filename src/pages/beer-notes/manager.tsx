@@ -1,7 +1,7 @@
 import React from 'react'
 
-function Index() {
+function Manager() {
   return <div>Beer Notes Manager</div>
 }
 
-export default Index
+export default Manager

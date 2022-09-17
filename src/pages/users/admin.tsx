@@ -57,7 +57,7 @@ import {
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import SearchBar from '../../components/SearchBar'
 import UserCard from '../../components/UserCard'
-import Auth from '../../components/Auth'
+import LoginForm from '../../components/LoginForm'
 import NewUserModal from '../../components/NewUserModal'
 import { useAuthContext } from '../../context/AuthContext'
 import type { User, NewUser } from '../../types'
@@ -65,10 +65,10 @@ import type { User, NewUser } from '../../types'
 export default function Index() {
   const { user } = useAuthContext()
   const utils = trpc.useContext()
-  const createUser = trpc.useMutation('user.createUser')
-  const getUsers = trpc.useQuery(['user.getUsers'])
-  const updateUser = trpc.useMutation('user.updateUser')
-  const deleteUser = trpc.useMutation('user.deleteUser')
+  const createUser = trpc.useMutation('users.createUser')
+  const getUsers = trpc.useQuery(['users.getUsers'])
+  const updateUser = trpc.useMutation('users.updateUser')
+  const deleteUser = trpc.useMutation('users.deleteUser')
   const [authFilter, setAuthFilter] = useState<string>('all')
   const [search, setSearch] = useState<string>('')
   const [users, setUsers] = useState<User[] | undefined>()
@@ -91,7 +91,7 @@ export default function Index() {
         { id: uid },
         {
           onSuccess: () => {
-            utils.invalidateQueries(['user.getUsers'])
+            utils.invalidateQueries(['users.getUsers'])
           }
         }
       )
@@ -103,7 +103,7 @@ export default function Index() {
     async (data: User) => {
       await updateUser.mutateAsync(data, {
         onSuccess: () => {
-          utils.invalidateQueries(['user.getUsers'])
+          utils.invalidateQueries(['users.getUsers'])
         }
       })
     },
@@ -114,7 +114,7 @@ export default function Index() {
     async (data: NewUser) => {
       await createUser.mutateAsync(data, {
         onSuccess: () => {
-          utils.invalidateQueries(['user.getUsers'])
+          utils.invalidateQueries(['users.getUsers'])
         }
       })
     },
@@ -122,7 +122,6 @@ export default function Index() {
   )
 
   const handleRadioButtonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
     setAuthFilter(e.target.value)
   }
 
@@ -152,7 +151,7 @@ export default function Index() {
     })
   }
 
-  if (!user.firstName) return <Auth /> // if user is not logged in, return Auth component
+  if (!user.firstName) return <LoginForm /> // if user is not logged in, return Auth component
 
   return (
     <>
@@ -163,7 +162,7 @@ export default function Index() {
       />
       <Stack gap={3}>
         <Flex justify="space-between">
-          <Heading>{"User's Admin"}</Heading>
+          <Heading>{'Users'}</Heading>
           <Button colorScheme="green" onClick={onOpen}>
             New User
           </Button>

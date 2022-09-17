@@ -1,6 +1,18 @@
 /* 
   This is the page where admin can manage tasks
+
+  Tasks are displayed in a list, and admin can add, edit or delete tasks
+  
+  Tasks will automatically sorted by:
+    - priority
+
+  You can filter tasks by:
+    - priority, or
+    - role
+
+  In this page, adming can also add, edit or delete priorities. 
   We can also create, edit and delete task priority times.
+
   Here we can create, edit, delete tasks.
   You can filter tasks by priority, role, and domain.
 */
@@ -18,8 +30,7 @@ import {
 } from '@chakra-ui/react'
 import { trpc } from '../../utils/trpc'
 import NewTaskModal from '../../components/NewTaskModal'
-import SearchBar from '../../components/SearchBar'
-import Auth from '../../components/Auth'
+import Auth from '../../components/LoginForm'
 import TaskCard from '../../components/TaskCard'
 import { useAuthContext } from '../../context/AuthContext'
 import type { Task, NewTask } from '../../types'
@@ -27,10 +38,10 @@ import type { Task, NewTask } from '../../types'
 function Index() {
   const { user } = useAuthContext()
   const utils = trpc.useContext()
-  const createTask = trpc.useMutation('task.createTask')
-  const getTasks = trpc.useQuery(['task.getTasks'])
-  const updateTask = trpc.useMutation('task.updateTask')
-  const deleteTask = trpc.useMutation('task.deleteTask')
+  const createTask = trpc.useMutation('tasks.createTask')
+  const getTasks = trpc.useQuery(['tasks.getTasks'])
+  const updateTask = trpc.useMutation('tasks.updateTask')
+  const deleteTask = trpc.useMutation('tasks.deleteTask')
   const [tasks, setTasks] = useState<Task[] | undefined>()
 
   const [search, setSearch] = React.useState('')
@@ -51,7 +62,7 @@ function Index() {
         { id: uid },
         {
           onSuccess: () => {
-            utils.invalidateQueries(['task.getTasks'])
+            utils.invalidateQueries(['tasks.getTasks'])
           }
         }
       )
@@ -63,7 +74,7 @@ function Index() {
     async (data: Task) => {
       await updateTask.mutateAsync(data, {
         onSuccess: () => {
-          utils.invalidateQueries(['task.getTasks'])
+          utils.invalidateQueries(['tasks.getTasks'])
         }
       })
     },
@@ -74,7 +85,7 @@ function Index() {
     async (data: NewTask) => {
       await createTask.mutateAsync(data, {
         onSuccess: () => {
-          utils.invalidateQueries(['task.getTasks'])
+          utils.invalidateQueries(['tasks.getTasks'])
         }
       })
     },
@@ -99,11 +110,7 @@ function Index() {
             New Task
           </Button>
         </Flex>
-        <SearchBar
-          search={search}
-          setSearch={setSearch}
-          placeholder="Search tasks by name or description"
-        />
+
         <FormControl>
           <FormLabel as="legend">Filter by role:</FormLabel>
           <Select>
