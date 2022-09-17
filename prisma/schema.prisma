@@ -23,82 +23,75 @@ datasource db {
 // must exist. For example, if a Post model defines an author, then 
 // the author must also exist.“ 
 
-enum Auth { // enum is a type that can be one of several possible values
+enum Auth {
   user
   admin
   kitchen
   bar
 }
 
-enum TaskStatus {
-  todo
-  inProgress
-  done
-}
-
 model Department {
-  id        String      @id @default(cuid())
+  id        String   @id @default(cuid())
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   roles     Role[] // many roles can belong to one department
-
 }
 
 model Role {
-  id             String   @id @default(cuid())
-  name           String
-  description    String
-  department     Department @relation(fields: [departmentId], references: [id]) // a role can only belong to one department
-  departmentId  String
-  created     DateTime @default(now())
-  modified DateTime @updatedAt
-  tasks          Task[] // many tasks can belong to one role
-  users          User[] // many users can have the same role
+  id           String     @id @default(cuid())
+  name         String
+  description  String
+  department   Department @relation(fields: [departmentId], references: [id]) // a role can only belong to one department
+  departmentId String
+  created      DateTime   @default(now())
+  modified     DateTime   @updatedAt
+  tasks        Task[] // Many-to-one relationship
+  users        User[] // Many-to-many relationship
 }
 
 model User {
-  id            String   @id @default(cuid())
-  firstName    String
-  lastName     String
-  alias         String
-  password      String @unique
-  auth          String @default("user")
-  roles         Role[] // many roles can belong to one user
+  id        String  @id @default(cuid())
+  firstName String
+  lastName  String
+  alias     String
+  password  String  @unique
+  auth      String  @default("user")
+  roles     Role[] // many roles can belong to one user
+  locked    Boolean @default(false)
 
   @@unique([firstName, lastName, password])
 }
 
-model TaskPriority { // this is a lookup table
-  id            String   @id @default(cuid())
-  name          String
-  description   String
-  tasks         Task[] // many tasks can have the same priority
-}
-
 model Task {
   id             String   @id @default(cuid())
-  name          String
+  name           String
   description    String
-  createdAt     DateTime @default(now())
-  lastEdited DateTime @updatedAt
-  priority       TaskPriority @relation(fields: [taskPriorityId], references: [id])
-  taskPriorityId String // this is the foreign key
-  assignedTo    Role @relation(fields: [roleId], references: [id]) // a task can only be assigned to one role
-  roleId         String // this is the foreign key
-  status         String @default("user")  // a task can only have one status
+
+  createdAt      DateTime @default(now())
+  lastEdited     DateTime @updatedAt
+
+  priority       Int //
+
+  assignedTo     Role     @relation(fields: [assignedToId], references: [id]) // a task can only be assigned to one role
+  assignedToId   String
 }
 
 model Day {
-  id              String   @id @default(cuid())
+  id             String   @id @default(cuid())
   startingCovers Int
   endingCovers   Int
-  date            DateTime @default(now())
+  date           DateTime @default(now())
   totalSales     Int
   totalTips      Int
-  weather         String
-  notes           String
+  weather        String
+  notes          String
 }
 
-
-
+model Priority {
+  id             String   @id @default(cuid())
+  name           String
+  description    String
+  createdAt      DateTime @default(now())
+  lastEdited     DateTime @updatedAt
+}
