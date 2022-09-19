@@ -15,7 +15,7 @@ and then the client-side will render the original page they were on.
 
 */
 
-import { useState, useRef, forwardRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { trpc } from '../utils/trpc'
 import { ArrowRightIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 import {
@@ -35,7 +35,6 @@ import {
   Image,
   HStack,
   Input,
-  PinInputField,
   useToast
 } from '@chakra-ui/react'
 import { useAuthContext } from '../context/AuthContext'
@@ -51,8 +50,6 @@ import { useAuthContext } from '../context/AuthContext'
 export default function LoginForm() {
   const toast = useToast() // for toast notifications
   const { onOpen, onClose, isOpen } = useDisclosure() // for popover
-  const passwordInput = useRef<HTMLInputElement>(null) // password input ref
-  const [password, setPassword] = useState<string>('') // password state
   const { changeUser } = useAuthContext() // change user context
 
   // setting display name for forwardRef() component
@@ -61,7 +58,6 @@ export default function LoginForm() {
 
   // fetch array of user objects from database
   const userQuery = trpc.useQuery(['users.getUsers'])
-  console.log(password)
 
   // use this to check if password matches a user's password
   function handleSubmit(password: string) {
@@ -78,9 +74,8 @@ export default function LoginForm() {
     if (!matched) {
       // show error message
       console.log('Error: no such password')
-      setPassword('') // clear password
-      if (passwordInput.current) {
-        passwordInput?.current?.focus() // focus on password input
+      if (firstPinInput.current) {
+        firstPinInput?.current?.focus() // focus on password input
       }
       return toast({
         // send error message toast
@@ -90,6 +85,52 @@ export default function LoginForm() {
         duration: 5000,
         isClosable: true
       })
+    }
+  }
+
+  const firstPinInput = useRef<HTMLInputElement>(null)
+  const secondPinInput = useRef<HTMLInputElement>(null)
+  const thirdPinInput = useRef<HTMLInputElement>(null)
+  const fourthPinInput = useRef<HTMLInputElement>(null)
+
+  const [password, setPassword] = useState('')
+
+  // if backspace is pressed, delete previous input
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace') {
+      // remove the last character from the password
+      console.log('backspace pressed')
+      setPassword(password => password.slice(0, -1))
+    }
+  }
+
+  // focus on first input when component mounts
+  useEffect(() => {
+    firstPinInput.current?.focus()
+  }, [])
+
+  // here we are controlling the focus of the input
+  useEffect(() => {
+    // if password length is 1, focus on second input
+    if (password.length === 0) firstPinInput.current?.focus()
+    if (password.length === 1) secondPinInput.current?.focus()
+    if (password.length === 2) thirdPinInput.current?.focus()
+    if (password.length === 3) fourthPinInput.current?.focus()
+    console.log('Password: ' + password)
+  }, [password])
+
+  const handleSetPassword = (order: string, input: string) => {
+    if (order === 'first') {
+      setPassword(input)
+    }
+    if (order === 'second') {
+      setPassword(password => password + input)
+    }
+    if (order === 'third') {
+      setPassword(password => password + input)
+    }
+    if (order === 'fourth') {
+      setPassword(password => password + input)
     }
   }
 
@@ -140,18 +181,44 @@ export default function LoginForm() {
           </PopoverContent>
         </Popover>
       </Flex>
-      <HStack justify="center">
+      <HStack justifyContent="center">
         <Input
-          defaultValue=""
-          type="password"
-          maxLength={4}
-          pattern="[0-9]*"
-          fontSize="2xl"
+          maxW="45px"
+          maxLength={1}
           size="lg"
-          autoFocus={true}
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          maxW="6rem"
+          pattern={'/[0-9]/'}
+          as="input"
+          ref={firstPinInput}
+          value={password[0]}
+          onKeyDown={handleKeyDown}
+          onChange={e => handleSetPassword('first', e.target.value)}
+        />
+        <Input
+          maxW="45px"
+          size="lg"
+          maxLength={1}
+          ref={secondPinInput}
+          value={password[1]}
+          onKeyDown={handleKeyDown}
+          onChange={e => handleSetPassword('second', e.target.value)}
+        />
+        <Input
+          maxW="45px"
+          size="lg"
+          maxLength={1}
+          ref={thirdPinInput}
+          value={password[2]}
+          onKeyDown={handleKeyDown}
+          onChange={e => handleSetPassword('third', e.target.value)}
+        />
+        <Input
+          maxW="45px"
+          size="lg"
+          maxLength={1}
+          ref={fourthPinInput}
+          value={password[3]}
+          onKeyDown={handleKeyDown}
+          onChange={e => handleSetPassword('fourth', e.target.value)}
         />
       </HStack>
       <Flex justify="center">
