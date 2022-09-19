@@ -38,6 +38,8 @@ import {
   useToast
 } from '@chakra-ui/react'
 import { useAuthContext } from '../context/AuthContext'
+import type { User } from '../types'
+import { set } from 'zod'
 // import { User } from '../types' // import User type
 // import PasswordInput from './PasswordInput'
 
@@ -48,34 +50,48 @@ import { useAuthContext } from '../context/AuthContext'
 // [] fix input delete bug
 
 export default function LoginForm() {
+  // fetch array of user objects from database
+  const userQuery = trpc.useQuery(['users.getUsers'])
   const toast = useToast() // for toast notifications
   const { onOpen, onClose, isOpen } = useDisclosure() // for popover
   const { changeUser } = useAuthContext() // change user context
+  const firstPinInput = useRef<HTMLInputElement>(null)
+  const secondPinInput = useRef<HTMLInputElement>(null)
+  const thirdPinInput = useRef<HTMLInputElement>(null)
+  const fourthPinInput = useRef<HTMLInputElement>(null)
+  const [firstPin, setFirstPin] = useState<string>('')
+  const [secondPin, setSecondPin] = useState<string>('')
+  const [thirdPin, setThirdPin] = useState<string>('')
+  const [fourthPin, setFourthPin] = useState<string>('')
 
-  // setting display name for forwardRef() component
-  // is good for debugging , since it means that it will print
-  // your component's displayNme property in the React DevTools
+  const password = firstPin + secondPin + thirdPin + fourthPin
 
-  // fetch array of user objects from database
-  const userQuery = trpc.useQuery(['users.getUsers'])
+  const clearInputs = () => {
+    setFirstPin('')
+    setSecondPin('')
+    setThirdPin('')
+    setFourthPin('')
+  }
 
   // use this to check if password matches a user's password
   function handleSubmit(password: string) {
     let matched = false
     // loop through users array
-    userQuery?.data?.forEach(user => {
+    userQuery?.data?.forEach((user: User) => {
       if (password === user.password) {
         console.log('password matched')
         matched = true
+        clearInputs() // reset password input
         changeUser(user) // login user
       }
     })
 
     if (!matched) {
       // show error message
+      clearInputs()
       console.log('Error: no such password')
       if (firstPinInput.current) {
-        firstPinInput?.current?.focus() // focus on password input
+        firstPinInput.current?.focus() // focus on password input
       }
       return toast({
         // send error message toast
@@ -88,19 +104,26 @@ export default function LoginForm() {
     }
   }
 
-  const firstPinInput = useRef<HTMLInputElement>(null)
-  const secondPinInput = useRef<HTMLInputElement>(null)
-  const thirdPinInput = useRef<HTMLInputElement>(null)
-  const fourthPinInput = useRef<HTMLInputElement>(null)
-
-  const [password, setPassword] = useState('')
-
   // if backspace is pressed, delete previous input
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
       // remove the last character from the password
       console.log('backspace pressed')
-      setPassword(password => password.slice(0, -1))
+      if (fourthPin) {
+        setFourthPin('')
+        return thirdPinInput.current?.focus()
+      }
+      if (thirdPin) {
+        setThirdPin('')
+        return secondPinInput.current?.focus()
+      }
+      if (secondPin) {
+        setSecondPin('')
+        return firstPinInput.current?.focus()
+      }
+      if (firstPin) {
+        setFirstPin('')
+      }
     }
   }
 
@@ -109,30 +132,18 @@ export default function LoginForm() {
     firstPinInput.current?.focus()
   }, [])
 
+  const handleFocus = (password: string) => {
+    if (password.length === 0) return firstPinInput.current?.focus()
+    if (password.length === 1) return secondPinInput.current?.focus()
+    if (password.length === 2) return thirdPinInput.current?.focus()
+    if (password.length === 3) return fourthPinInput.current?.focus()
+  }
   // here we are controlling the focus of the input
   useEffect(() => {
     // if password length is 1, focus on second input
-    if (password.length === 0) firstPinInput.current?.focus()
-    if (password.length === 1) secondPinInput.current?.focus()
-    if (password.length === 2) thirdPinInput.current?.focus()
-    if (password.length === 3) fourthPinInput.current?.focus()
-    console.log('Password: ' + password)
+    handleFocus(password)
+    console.log('password: ' + password)
   }, [password])
-
-  const handleSetPassword = (order: string, input: string) => {
-    if (order === 'first') {
-      setPassword(input)
-    }
-    if (order === 'second') {
-      setPassword(password => password + input)
-    }
-    if (order === 'third') {
-      setPassword(password => password + input)
-    }
-    if (order === 'fourth') {
-      setPassword(password => password + input)
-    }
-  }
 
   return (
     <Flex paddingTop="1rem" direction="column" gap={10}>
@@ -158,7 +169,6 @@ export default function LoginForm() {
           </PopoverTrigger>
           <PopoverContent>
             <PopoverHeader fontWeight="semibold">Hint</PopoverHeader>
-            {/* <PopoverArrow/> */}
             <PopoverCloseButton />
             <PopoverBody>
               <Text alignItems="center">
@@ -189,36 +199,40 @@ export default function LoginForm() {
           pattern={'/[0-9]/'}
           as="input"
           ref={firstPinInput}
-          value={password[0]}
+          value={firstPin}
           onKeyDown={handleKeyDown}
-          onChange={e => handleSetPassword('first', e.target.value)}
+          onFocus={() => handleFocus(password)}
+          onChange={e => setFirstPin(e.target.value)}
         />
         <Input
           maxW="45px"
           size="lg"
           maxLength={1}
           ref={secondPinInput}
-          value={password[1]}
+          value={secondPin}
           onKeyDown={handleKeyDown}
-          onChange={e => handleSetPassword('second', e.target.value)}
+          onFocus={() => handleFocus(password)}
+          onChange={e => setSecondPin(e.target.value)}
         />
         <Input
           maxW="45px"
           size="lg"
           maxLength={1}
           ref={thirdPinInput}
-          value={password[2]}
+          value={thirdPin}
           onKeyDown={handleKeyDown}
-          onChange={e => handleSetPassword('third', e.target.value)}
+          onFocus={() => handleFocus(password)}
+          onChange={e => setThirdPin(e.target.value)}
         />
         <Input
           maxW="45px"
           size="lg"
           maxLength={1}
           ref={fourthPinInput}
-          value={password[3]}
+          value={fourthPin}
           onKeyDown={handleKeyDown}
-          onChange={e => handleSetPassword('fourth', e.target.value)}
+          onFocus={() => handleFocus(password)}
+          onChange={e => setFourthPin(e.target.value)}
         />
       </HStack>
       <Flex justify="center">
