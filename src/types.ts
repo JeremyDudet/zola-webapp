@@ -71,3 +71,14 @@ export interface NewDepartment {
   name: string
   description: string
 }
+
+export interface JuiceRequest {
+  id: string
+  requestFromId: string
+  lemonAmount: number
+  orangeAmount: number
+  grapefruitAmount: number
+  notes: string
+  createdAt: Date
+  lastEdited: Date
+}

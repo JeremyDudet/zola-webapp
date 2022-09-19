@@ -43,6 +43,7 @@ import { Router } from 'next/router'
 import { IconType } from 'react-icons'
 import { IoIosWine, IoIosBeer } from 'react-icons/io'
 import KitchenAuthOnly from '../AdminAuthOnly'
+import BarAuthOnly from '../BarAuthOnly'
 
 interface MainProps {
   children: React.ReactNode
@@ -216,9 +217,6 @@ const Main = ({ children, router }: MainProps) => {
         <NavItem icon={BsCheck2Square} path={path} href="/tasks">
           Tasks
         </NavItem>
-        <NavItem icon={GiCutLemon} path={path} href="/tasks">
-          Daily Juice Par
-        </NavItem>
         <NavItem icon={BiChair} path={path} href="/seating-charts">
           Seating Charts
         </NavItem>
@@ -237,10 +235,16 @@ const Main = ({ children, router }: MainProps) => {
         <NavItem icon={MdLiquor} path={path} href="/spirits-notes">
           {'Spirits & Liqueurs'}
         </NavItem>
+        <BarAuthOnly user={user}>
+          <SidebarHeading>Bar</SidebarHeading>
+          <NavItem icon={GiCutLemon} path={path} href="/citrus-juice/pars">
+            Daily Juice Pars
+          </NavItem>
+        </BarAuthOnly>
         <KitchenAuthOnly user={user}>
           <SidebarHeading>Kitchen</SidebarHeading>
-          <NavItem icon={GiManualJuicer} path={path} href="/request-juice">
-            Request Juice
+          <NavItem icon={GiManualJuicer} path={path} href="/citrus-juice">
+            Citrus Juice
           </NavItem>
         </KitchenAuthOnly>
         <AdminAuthOnly user={user}>
@@ -252,7 +256,9 @@ const Main = ({ children, router }: MainProps) => {
             Roles
           </NavItem>
         </AdminAuthOnly>
-        <SidebarHeading>{`Settings: ${user.firstName} ${user.lastName}`}</SidebarHeading>
+        <SidebarHeading>{`Settings: ${
+          user.alias ? user.alias : user.firstName
+        }`}</SidebarHeading>
         <SwitchUser icon={ImShuffle} />
       </Flex>
     </Box>

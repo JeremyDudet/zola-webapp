@@ -6,11 +6,9 @@ interface Props {
   user: User
 }
 
-function KitchenAuthOnly({ user, children }: Props) {
-  if (user.auth !== 'admin') {
-    return null
+export default function AdminAuthOnly({ user, children }: Props) {
+  if (user.auth === 'admin') {
+    return <>{children}</>
   }
-  return <>{children}</>
+  return null
 }
-
-export default KitchenAuthOnly
