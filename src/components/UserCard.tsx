@@ -27,7 +27,7 @@ import { User } from '../types'
 interface Props {
   handleUserDelete: (uid: string) => void
   handleUserUpdate: (data: User) => void
-  setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>
+  setUsers: (users: User[]) => void
   uid: string
   firstName: string
   lastName: string
@@ -39,7 +39,6 @@ interface Props {
 function UserCard({
   handleUserDelete,
   handleUserUpdate,
-  setUsers,
   uid,
   firstName,
   lastName,
@@ -68,7 +67,6 @@ function UserCard({
     <>
       <AlertDelete
         handleDelete={handleUserDelete}
-        setUsers={setUsers}
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
         cancelRef={cancelRef}

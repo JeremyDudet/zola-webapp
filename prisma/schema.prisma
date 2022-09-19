@@ -51,30 +51,29 @@ model Role {
 }
 
 model User {
-  id        String  @id @default(cuid())
-  firstName String
-  lastName  String
-  alias     String
-  password  String  @unique
-  auth      String  @default("user")
-  roles     Role[] // many roles can belong to one user
-  locked    Boolean @default(false)
+  id              String         @id @default(cuid())
+  firstName       String
+  lastName        String
+  alias           String
+  password        String         @unique
+  auth            String         @default("user")
+  roles           Role[] // many roles can belong to one user
+  locked          Boolean        @default(false)
+  juiceRequested  JuiceRequest[] @relation("UserOnRequest")
+  juiceFullfilled JuiceRequest[] @relation("UserOnFullfilled")
 
   @@unique([firstName, lastName, password])
 }
 
 model Task {
-  id             String   @id @default(cuid())
-  name           String
-  description    String
-
-  createdAt      DateTime @default(now())
-  lastEdited     DateTime @updatedAt
-
-  priority       Int //
-
-  assignedTo     Role     @relation(fields: [assignedToId], references: [id]) // a task can only be assigned to one role
-  assignedToId   String
+  id           String   @id @default(cuid())
+  name         String
+  description  String
+  createdAt    DateTime @default(now())
+  lastEdited   DateTime @updatedAt
+  priority     Int
+  assignedTo   Role     @relation(fields: [assignedToId], references: [id]) // a task can only be assigned to one role
+  assignedToId String
 }
 
 model Day {
@@ -89,9 +88,25 @@ model Day {
 }
 
 model Priority {
-  id             String   @id @default(cuid())
-  name           String
-  description    String
-  createdAt      DateTime @default(now())
-  lastEdited     DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  lastEdited  DateTime @updatedAt
+}
+
+model JuiceRequest {
+  id                String   @id @default(cuid())
+  requestFrom       User     @relation(name: "UserOnRequest", fields: [requestFromId], references: [id])
+  requestFromId     String
+  limeAmount        Float
+  lemonAmount       Float
+  orangeAmount      Float
+  grapefruitAmount  Float
+  notes             String
+  createdAt         DateTime @default(now())
+  lastEdited        DateTime @updatedAt
+  requestFullfilled Boolean  @default(false)
+  fullfilledBy      User     @relation(name: "UserOnFullfilled", fields: [fullfilledById], references: [id])
+  fullfilledById    String
 }

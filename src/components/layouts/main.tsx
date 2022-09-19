@@ -18,6 +18,7 @@ import Logo from '../Logo'
 import NextLink from 'next/link'
 import ThemeToggleButton from '../theme-toggle-button'
 import { useAuthContext } from '../../context/AuthContext'
+import AdminAuthOnly from '../AdminAuthOnly'
 import {
   Box,
   Flex,
@@ -30,6 +31,7 @@ import {
   Text,
   Center
 } from '@chakra-ui/react'
+import { GiCutLemon, GiManualJuicer } from 'react-icons/gi'
 import { BsCheck2Square } from 'react-icons/bs'
 import { BiFoodMenu, BiChair, BiEdit } from 'react-icons/bi'
 import { HamburgerIcon } from '@chakra-ui/icons'
@@ -40,6 +42,7 @@ import { ImShuffle } from 'react-icons/im'
 import { Router } from 'next/router'
 import { IconType } from 'react-icons'
 import { IoIosWine, IoIosBeer } from 'react-icons/io'
+import KitchenAuthOnly from '../AdminAuthOnly'
 
 interface MainProps {
   children: React.ReactNode
@@ -196,7 +199,7 @@ const Main = ({ children, router }: MainProps) => {
       color="gray.100"
       w="60"
     >
-      <Flex px="4" py="5" align="center">
+      <Flex px="4" py="5" align="center" justify="space-between">
         <Logo onClose={sidebar.onClose} />
       </Flex>
       <Flex
@@ -213,11 +216,14 @@ const Main = ({ children, router }: MainProps) => {
         <NavItem icon={BsCheck2Square} path={path} href="/tasks">
           Tasks
         </NavItem>
+        <NavItem icon={GiCutLemon} path={path} href="/tasks">
+          Daily Juice Par
+        </NavItem>
         <NavItem icon={BiChair} path={path} href="/seating-charts">
           Seating Charts
         </NavItem>
         <NavItem icon={BiFoodMenu} path={path} href="/food-notes">
-          Food
+          Food Notes
         </NavItem>
         <NavItem icon={IoIosWine} path={path} href="/wine-notes">
           Wine
@@ -231,14 +237,22 @@ const Main = ({ children, router }: MainProps) => {
         <NavItem icon={MdLiquor} path={path} href="/spirits-notes">
           {'Spirits & Liqueurs'}
         </NavItem>
-        <SidebarHeading>Admin</SidebarHeading>
-        <NavItem icon={BiEdit} path={path} href="/users/admin">
-          Users
-        </NavItem>
-        <NavItem icon={BiEdit} path={path} href="/roles/admin">
-          Roles
-        </NavItem>
-        <SidebarHeading>Settings</SidebarHeading>
+        <KitchenAuthOnly user={user}>
+          <SidebarHeading>Kitchen</SidebarHeading>
+          <NavItem icon={GiManualJuicer} path={path} href="/request-juice">
+            Request Juice
+          </NavItem>
+        </KitchenAuthOnly>
+        <AdminAuthOnly user={user}>
+          <SidebarHeading>Admin</SidebarHeading>
+          <NavItem icon={BiEdit} path={path} href="/users/admin">
+            Users
+          </NavItem>
+          <NavItem icon={BiEdit} path={path} href="/roles/admin">
+            Roles
+          </NavItem>
+        </AdminAuthOnly>
+        <SidebarHeading>{`Settings: ${user.firstName} ${user.lastName}`}</SidebarHeading>
         <SwitchUser icon={ImShuffle} />
       </Flex>
     </Box>
@@ -316,7 +330,7 @@ const Main = ({ children, router }: MainProps) => {
             />
           </Flex>
         </Flex>
-        <Box as="main" mx="auto" p="4" maxW="container.lg" m>
+        <Box as="main" mx="auto" p="4" maxW="container.lg">
           {children}
         </Box>
       </Box>

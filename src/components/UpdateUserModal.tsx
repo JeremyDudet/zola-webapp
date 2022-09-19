@@ -25,7 +25,7 @@
         the modal will close.
 */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Modal,
@@ -73,16 +73,16 @@ function UpdateUserModal({
   isOpen,
   onClose
 }: Props) {
-  const [newFirstName, setNewFirstName] = React.useState(firstName)
-  const [newLastName, setNewLastName] = React.useState(lastName)
-  const [newAlias, setNewAlias] = React.useState(alias)
-  const [newPassword, setNewPassword] = React.useState(password)
-  const [newAuthLevel, setNewAuthLevel] = React.useState(authLevel)
-  const [isWriting, setIsWriting] = React.useState(false)
+  const [newFirstName, setNewFirstName] = useState(firstName)
+  const [newLastName, setNewLastName] = useState(lastName)
+  const [newAlias, setNewAlias] = useState(alias)
+  const [newPassword, setNewPassword] = useState(password)
+  const [newAuthLevel, setNewAuthLevel] = useState(authLevel)
+  const [isWriting, setIsWriting] = useState(false)
   //   const router = useRouter()
 
   // check to see if the user has edited the form
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       newFirstName !== firstName ||
       newLastName !== lastName ||
@@ -192,34 +192,18 @@ function UpdateUserModal({
               </FormControl>
               <FormControl isRequired as="fieldset">
                 <FormLabel as="legend">Authorization Level</FormLabel>
-                <RadioGroup defaultValue="user">
+                <RadioGroup value={newAuthLevel}>
                   <HStack spacing="24px">
-                    <Radio
-                      value="user"
-                      checked={newAuthLevel === 'user'}
-                      onChange={handleOptionChange}
-                    >
+                    <Radio value="user" onChange={handleOptionChange}>
                       User
                     </Radio>
-                    <Radio
-                      value="bar"
-                      checked={newAuthLevel === 'bar'}
-                      onChange={handleOptionChange}
-                    >
+                    <Radio value="bar" onChange={handleOptionChange}>
                       Bar
                     </Radio>
-                    <Radio
-                      value="kitchen"
-                      checked={newAuthLevel === 'kitchen'}
-                      onChange={handleOptionChange}
-                    >
+                    <Radio value="kitchen" onChange={handleOptionChange}>
                       Kitchen
                     </Radio>
-                    <Radio
-                      value="admin"
-                      checked={newAuthLevel === 'admin'}
-                      onChange={handleOptionChange}
-                    >
+                    <Radio value="admin" onChange={handleOptionChange}>
                       Admin
                     </Radio>
                   </HStack>
