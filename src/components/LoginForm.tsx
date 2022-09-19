@@ -13,6 +13,13 @@ The inputed password will be compared to the passwords in the database.
 If the passwords match, the user will be logged in, and
 and then the client-side will render the original page they were on.
 
+----------------------------------------
+
+This is a custom implementation of the Chakra UI PinInput component.
+The PinInput component is a component that allows users to input a 4-digit pin.
+The PinInput component from Chakra UI was actually a bit buggy, so I had to
+implement my own version of it.
+
 */
 
 import { useEffect, useState, useRef } from 'react'
@@ -39,7 +46,6 @@ import {
 } from '@chakra-ui/react'
 import { useAuthContext } from '../context/AuthContext'
 import type { User } from '../types'
-import { set } from 'zod'
 // import { User } from '../types' // import User type
 // import PasswordInput from './PasswordInput'
 
