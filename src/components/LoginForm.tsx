@@ -34,7 +34,7 @@ import {
   PopoverBody,
   Image,
   HStack,
-  PinInput,
+  Input,
   PinInputField,
   useToast
 } from '@chakra-ui/react'
@@ -55,18 +55,13 @@ export default function LoginForm() {
   const [password, setPassword] = useState<string>('') // password state
   const { changeUser } = useAuthContext() // change user context
 
-  // forwardRef()
-  const RefInputField = forwardRef<HTMLInputElement>((props, ref) => (
-    <PinInputField ref={ref} />
-  ))
   // setting display name for forwardRef() component
   // is good for debugging , since it means that it will print
   // your component's displayNme property in the React DevTools
-  RefInputField.displayName = 'RefInputField'
 
   // fetch array of user objects from database
   const userQuery = trpc.useQuery(['users.getUsers'])
-  console.log('userQuery', userQuery.data)
+  console.log(password)
 
   // use this to check if password matches a user's password
   function handleSubmit(password: string) {
@@ -133,7 +128,7 @@ export default function LoginForm() {
                   top="3px"
                   borderRadius="full"
                   boxSize="15px"
-                  src="toast_favicon.png"
+                  src="/toast_favicon.png"
                   alt="Toast Logo"
                 />
               </Text>
@@ -146,26 +141,25 @@ export default function LoginForm() {
         </Popover>
       </Flex>
       <HStack justify="center">
-        <PinInput
+        <Input
           defaultValue=""
-          type="number"
+          type="password"
+          maxLength={4}
+          pattern="[0-9]*"
+          fontSize="2xl"
           size="lg"
           autoFocus={true}
           value={password}
-          onChange={value => setPassword(value)}
-        >
-          <RefInputField ref={passwordInput} />
-          <PinInputField />
-          <PinInputField />
-          <PinInputField />
-        </PinInput>
+          onChange={e => setPassword(e.target.value)}
+          maxW="6rem"
+        />
       </HStack>
       <Flex justify="center">
         <Button
           as={Button}
           size="lg"
           rightIcon={<ArrowRightIcon />}
-          width="10rem"
+          width="6rem"
           onClick={() => handleSubmit(password)}
         >
           GO
