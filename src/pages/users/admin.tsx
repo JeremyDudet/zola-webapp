@@ -54,6 +54,7 @@ import {
   Td,
   Tr
 } from '@chakra-ui/react'
+import { FaUserPlus } from 'react-icons/fa'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import SearchBar from '../../components/SearchBar'
 import UserCard from '../../components/UserCard'
@@ -163,7 +164,7 @@ export default function Index() {
       <Stack gap={3}>
         <Flex justify="space-between">
           <Heading>{'Users'}</Heading>
-          <Button colorScheme="green" onClick={onOpen}>
+          <Button variant="outline" leftIcon={<FaUserPlus />} colorScheme="green" onClick={onOpen}>
             New User
           </Button>
         </Flex>

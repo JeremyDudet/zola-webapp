@@ -51,7 +51,12 @@ export default function AlertDelete({
             <Button ref={cancelRef} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="red" onClick={onDelete} ml={3}>
+            <Button
+              variant="outline"
+              colorScheme="red"
+              onClick={onDelete}
+              ml={3}
+            >
               Delete
             </Button>
           </AlertDialogFooter>

@@ -237,7 +237,7 @@ function UpdateUserModal({
             <Button colorScheme="gray" mr={3} onClick={handleClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue" onClick={onUpdate}>
+            <Button variant="outline" colorScheme="blue" onClick={onUpdate}>
               Update
             </Button>
           </ModalFooter>

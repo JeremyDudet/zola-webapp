@@ -78,7 +78,27 @@ export interface JuiceRequest {
   lemonAmount: number
   orangeAmount: number
   grapefruitAmount: number
-  notes: string
+  notes: string | null
   createdAt: Date
   lastEdited: Date
 }
+
+export interface NewJuiceRequest {
+  requestFromId: string
+  lemonAmount: number
+  orangeAmount: number
+  grapefruitAmount: number
+  notes: string | null
+}
+
+// model JuiceRequest {
+//   id                String   @id @default(cuid())
+//   requestFrom       User     @relation(name: "UserOnRequest", fields: [requestFromId], references: [id])
+//   requestFromId     String
+//   lemonAmount       Float
+//   orangeAmount      Float
+//   grapefruitAmount  Float
+//   notes             String?
+//   createdAt         DateTime @default(now())
+//   lastEdited        DateTime @updatedAt
+// }

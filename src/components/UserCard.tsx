@@ -13,14 +13,15 @@ import {
   Image,
   Heading,
   Center,
-  Button,
   useDisclosure,
   Table,
   Tbody,
   Tr,
-  Td
+  Td,
+  IconButton
 } from '@chakra-ui/react'
-import AlertDelete from './AlertDeleteModal'
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
+import AlertDeleteModal from './AlertDeleteModal'
 import UpdateUserModal from './UpdateUserModal'
 import { User } from '../types'
 
@@ -65,7 +66,7 @@ function UserCard({
 
   return (
     <>
-      <AlertDelete
+      <AlertDeleteModal
         handleDelete={handleUserDelete}
         isOpen={isDeleteOpen}
         onClose={onDeleteClose}
@@ -183,13 +184,25 @@ function UserCard({
               </Tr>
             </Tbody>
           </Table>
-          <Flex mt={4} justifyContent="space-between">
-            <Button colorScheme="blue" onClick={onUpdateOpen}>
+          <Flex mt={4} justifyContent="flex-end" gap="1rem">
+            <IconButton
+              variant={'outline'}
+              aria-label="update"
+              icon={<EditIcon />}
+              colorScheme="blue"
+              onClick={onUpdateOpen}
+            >
               Update
-            </Button>
-            <Button colorScheme="red" onClick={onDeleteOpen}>
+            </IconButton>
+            <IconButton
+              variant={'outline'}
+              aria-label="delete"
+              icon={<DeleteIcon />}
+              colorScheme="red"
+              onClick={onDeleteOpen}
+            >
               Delete
-            </Button>
+            </IconButton>
           </Flex>
         </Box>
       </Flex>

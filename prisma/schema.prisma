@@ -101,7 +101,7 @@ model JuiceRequest {
   lemonAmount       Float
   orangeAmount      Float
   grapefruitAmount  Float
-  notes             String
+  notes             String?
   createdAt         DateTime @default(now())
   lastEdited        DateTime @updatedAt
 }
