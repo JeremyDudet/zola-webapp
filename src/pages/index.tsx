@@ -4,7 +4,7 @@
   This will hold a few dashboard for 
 */
 
-import { Heading } from '@chakra-ui/react'
+import { Heading, Text } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { trpc } from '../utils/trpc'
 import { useAuthContext } from '../context/AuthContext' // import User state
@@ -21,8 +21,17 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Heading>{JSON.stringify(user.data)}</Heading>
-      {userQuery.data && <Heading>{JSON.stringify(userQuery.data)}</Heading>}
+      <Heading pb={2}>{`Welcome, ${
+        user.alias ? user.alias : user.firstName
+      }.`}</Heading>
+      <Heading size="sm" pb={2}>
+        Just want to quickly say that this project is still in constructions.
+      </Heading>
+      <Text>
+        {
+          "You'll find a lot of tabs in the menu navigation that currently don't work. I'll be rolling out updates in the very near future."
+        }
+      </Text>
     </>
   )
 }

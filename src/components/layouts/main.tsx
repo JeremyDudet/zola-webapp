@@ -238,7 +238,7 @@ const Main = ({ children, router }: MainProps) => {
         <BarAuthOnly user={user}>
           <SidebarHeading>Bar</SidebarHeading>
           <NavItem icon={GiCutLemon} path={path} href="/citrus-juice/pars">
-            Daily Juice Pars
+            Daily Citrus
           </NavItem>
         </BarAuthOnly>
         <KitchenAuthOnly user={user}>

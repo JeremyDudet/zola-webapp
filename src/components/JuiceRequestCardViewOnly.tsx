@@ -1,19 +1,6 @@
-import { useRef } from 'react'
-import {
-  Box,
-  Text,
-  Flex,
-  IconButton,
-  VStack,
-  useDisclosure,
-  HStack,
-  Center
-} from '@chakra-ui/react'
-import AlertDeleteModal from './AlertDeleteModal'
-import UpdateJuiceRequestModal from './UpdateJuiceRequestModal'
+import { Box, Text, Flex, VStack, HStack, Center } from '@chakra-ui/react'
 import styled from '@emotion/styled'
-import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import type { JuiceRequestUpdate, User } from '../types'
+import type { User } from '../types'
 
 const StyledSpan = styled.span`
   color: gray;
@@ -30,74 +17,29 @@ interface Props {
   grapefruitAmount: number
   notes: string | null
   createdAt: Date
-  onDelete: (id: string) => void
-  handleUpdateJuiceRequest: (data: JuiceRequestUpdate) => void
 }
 
 export default function JuiceRequestCard(props: Props) {
   const user = props.users?.find(user => user.id === props.requestedBy) // find the user that matches the requestedBy id
-  const cancelRef = useRef(null)
-  const {
-    isOpen: isUpdateOpen,
-    onOpen: onUpdateOpen,
-    onClose: onUpdateClose
-  } = useDisclosure()
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: onDeleteOpen,
-    onClose: onDeleteClose
-  } = useDisclosure()
 
   const determineIfPlural = (amount: number) => {
     return amount > 1 ? 's' : ''
   }
 
   const formatedDate = (date: Date) => {
-    const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-
-    const month = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ]
-    const dayOfMonth = date.getDate()
-    const day = date.getDay()
-    const getMonth = date.getMonth()
-    const shortyear = date.getFullYear().toString().substr(-2)
-    const hour = date.getHours()
-    const minute = date.getMinutes()
-    return `${dayOfWeek[day]}, ${month[getMonth]} ${dayOfMonth}, '${shortyear} at ${hour}:${minute}`
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      year: '2-digit',
+      month: '2-digit',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }
+    return new Date(date).toLocaleDateString('en-US', options)
   }
 
   return (
     <>
-      <AlertDeleteModal
-        cancelRef={cancelRef}
-        isOpen={isDeleteOpen}
-        onClose={onDeleteClose}
-        handleDelete={props.onDelete}
-        id={props.id}
-        actionDescriptor="Delete Request"
-      />
-      <UpdateJuiceRequestModal
-        isOpen={isUpdateOpen}
-        onClose={onUpdateClose}
-        id={props.id}
-        lemonAmount={props.lemonAmount}
-        orangeAmount={props.orangeAmount}
-        grapefruitAmount={props.grapefruitAmount}
-        notes={props.notes}
-        handleUpdateJuiceRequest={props.handleUpdateJuiceRequest}
-      />
       <Flex p={38} w="full" alignItems="center" justifyContent="center">
         <Box
           w="md"
@@ -139,7 +81,7 @@ export default function JuiceRequestCard(props: Props) {
               <Box pb="1.5rem">
                 <StyledSpan>May I please have:</StyledSpan>
               </Box>
-              <VStack alignItems="center">
+              <VStack alignItems="center" pb="1.5rem">
                 <HStack justifyContent="flex-start">
                   {props.lemonAmount ? (
                     <Text fontWeight="semibold">{`${
@@ -151,7 +93,9 @@ export default function JuiceRequestCard(props: Props) {
                 </HStack>
                 <Box>
                   {props.orangeAmount ? (
-                    <Text>{`${props.orangeAmount} quart${determineIfPlural(
+                    <Text fontWeight="semibold">{`${
+                      props.orangeAmount
+                    } quart${determineIfPlural(
                       props.orangeAmount
                     )} of orange juice${
                       props.grapefruitAmount ? ',' : ''
@@ -160,13 +104,15 @@ export default function JuiceRequestCard(props: Props) {
                 </Box>
                 <Box>
                   {props.grapefruitAmount ? (
-                    <Text>{`${props.grapefruitAmount} quart${determineIfPlural(
+                    <Text fontWeight="semibold">{`${
+                      props.grapefruitAmount
+                    } quart${determineIfPlural(
                       props.grapefruitAmount
                     )} of grapefruit juice`}</Text>
                   ) : null}
                 </Box>
               </VStack>
-              <VStack alignItems="flex-end">
+              <VStack alignItems="flex-end" pb="1.5rem">
                 <StyledSpan>{`...thank you. `}</StyledSpan>
                 <StyledSpan>{`- ${
                   user?.alias ? user?.alias : user?.firstName
@@ -180,26 +126,6 @@ export default function JuiceRequestCard(props: Props) {
               ) : null}
             </>
           )}
-          <Flex mt={4} justifyContent="flex-end" gap="1rem">
-            <IconButton
-              variant={'outline'}
-              aria-label="update"
-              icon={<EditIcon />}
-              colorScheme="blue"
-              onClick={onUpdateOpen}
-            >
-              Update
-            </IconButton>
-            <IconButton
-              variant={'outline'}
-              aria-label="delete"
-              icon={<DeleteIcon />}
-              colorScheme="red"
-              onClick={onDeleteOpen}
-            >
-              Delete
-            </IconButton>
-          </Flex>
         </Box>
       </Flex>
     </>

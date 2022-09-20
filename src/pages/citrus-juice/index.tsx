@@ -5,23 +5,38 @@ import {
   Button,
   Heading,
   useDisclosure,
-  Divider
+  Divider,
+  Box,
+  Text
 } from '@chakra-ui/react'
 import { BiMessageRoundedAdd } from 'react-icons/bi'
 import { useAuthContext } from '../../context/AuthContext'
 import LoginForm from '../../components/LoginForm'
 import NewJuiceRequestModal from '../../components/NewJuiceRequestModal'
 import JuiceRequestCard from '../../components/JuiceRequestCard'
-import type { JuiceRequest, NewJuiceRequest, JuiceRequestUpdate, User } from '../../types'
+import type {
+  JuiceRequest,
+  NewJuiceRequest,
+  JuiceRequestUpdate,
+  User
+} from '../../types'
 
 export default function Index() {
   const utils = trpc.useContext()
   const getUsers = trpc.useQuery(['users.getUsers'])
   const getJuiceRequests = trpc.useQuery(['juiceRequests.getJuiceRequests'])
-  const updateJuiceRequest = trpc.useMutation('juiceRequests.updateJuiceRequest')
-  const deleteJuiceRequest = trpc.useMutation('juiceRequests.deleteJuiceRequest')
-  const createNewJuiceRequest = trpc.useMutation('juiceRequests.createJuiceRequest')
-  const [juiceRequests, setJuiceRequests] = useState<JuiceRequest[] | undefined>()
+  const updateJuiceRequest = trpc.useMutation(
+    'juiceRequests.updateJuiceRequest'
+  )
+  const deleteJuiceRequest = trpc.useMutation(
+    'juiceRequests.deleteJuiceRequest'
+  )
+  const createNewJuiceRequest = trpc.useMutation(
+    'juiceRequests.createJuiceRequest'
+  )
+  const [juiceRequests, setJuiceRequests] = useState<
+    JuiceRequest[] | undefined
+  >()
   const [users, setUsers] = useState<User[] | undefined>()
   const { user } = useAuthContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -39,11 +54,8 @@ export default function Index() {
   useEffect(() => {
     if (getUsers.isFetching) setUsers(undefined)
     if (getUsers.isFetched) setUsers(getUsers.data)
-  }, [
-    getUsers.data,
-    getUsers.isFetched,
-    getUsers.isFetching
-  ])
+  }, [getUsers.data, getUsers.isFetched, getUsers.isFetching])
+
   const handleClose = () => {
     onClose()
   }
@@ -57,7 +69,7 @@ export default function Index() {
       })
     },
     [createNewJuiceRequest, utils]
-  ) 
+  )
 
   const handleDeleteJuiceRequest = useCallback(
     async (id: string) => {
@@ -86,7 +98,7 @@ export default function Index() {
 
   const filterTodaysRequests = (requests: JuiceRequest[] | undefined) => {
     const today = new Date()
-    const todaysRequests = requests?.filter((request) => {
+    const todaysRequests = requests?.filter(request => {
       const requestDate = new Date(request.createdAt)
       return (
         requestDate.getDate() === today.getDate() &&
@@ -99,7 +111,7 @@ export default function Index() {
 
   const filterPastRequests = (requests: JuiceRequest[] | undefined) => {
     const today = new Date()
-    const pastRequests = requests?.filter((request) => {
+    const pastRequests = requests?.filter(request => {
       const requestDate = new Date(request.createdAt)
       return (
         requestDate.getDate() < today.getDate() ||
@@ -110,39 +122,53 @@ export default function Index() {
     return pastRequests
   }
 
-
   if (!user.firstName) {
     return <LoginForm />
   }
 
   return (
     <>
-      <NewJuiceRequestModal isOpen={isOpen} onClose={handleClose} onSubmit={handleCreateJuiceRequest} />
+      <NewJuiceRequestModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        onSubmit={handleCreateJuiceRequest}
+      />
       <HStack justify="space-between" mb={4}>
         <Heading>Citrus Juice</Heading>
-        <Button leftIcon={<BiMessageRoundedAdd />} variant="outline" colorScheme="green" onClick={onOpen}>
+        <Button
+          leftIcon={<BiMessageRoundedAdd />}
+          variant="outline"
+          colorScheme="green"
+          onClick={onOpen}
+        >
           New Request
         </Button>
       </HStack>
       <Divider />
-      <Heading size="md" mt="4">{"Today's Requests"}</Heading>
-      {filterTodaysRequests(juiceRequests)?.map(juiceRequest => (
-        <JuiceRequestCard
-          users={users}
-          id={juiceRequest.id}
-          key={juiceRequest.id}
-          requestedBy={juiceRequest.requestFromId}
-          lemonAmount={juiceRequest.lemonAmount}
-          orangeAmount={juiceRequest.orangeAmount}
-          grapefruitAmount={juiceRequest.grapefruitAmount}
-          notes={juiceRequest.notes}
-          createdAt={juiceRequest.createdAt}
-          onDelete={handleDeleteJuiceRequest}
-          handleUpdateJuiceRequest={handleUpdateJuiceRequest}
-        />
-      ))}
+      <Heading size="md" mt="4">
+        {"Today's Requests"}
+      </Heading>
+      <Box>
+        {filterTodaysRequests(juiceRequests)?.map(juiceRequest => (
+          <JuiceRequestCard
+            users={users}
+            id={juiceRequest.id}
+            key={juiceRequest.id}
+            requestedBy={juiceRequest.requestFromId}
+            lemonAmount={juiceRequest.lemonAmount}
+            orangeAmount={juiceRequest.orangeAmount}
+            grapefruitAmount={juiceRequest.grapefruitAmount}
+            notes={juiceRequest.notes}
+            createdAt={juiceRequest.createdAt}
+            onDelete={handleDeleteJuiceRequest}
+            handleUpdateJuiceRequest={handleUpdateJuiceRequest}
+          />
+        ))}
+      </Box>
       <Divider />
-      <Heading size="md" mt="4">{"Past Requests"}</Heading>
+      <Heading size="md" mt="4">
+        {'Past Requests'}
+      </Heading>
       {filterPastRequests(juiceRequests)?.map(juiceRequest => (
         <JuiceRequestCard
           users={users}
