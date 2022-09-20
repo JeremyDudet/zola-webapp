@@ -57,6 +57,10 @@ export default function CitrusJuicePars() {
     })
   }
 
+  const HandleUseColorModeValue = (lightColor: string, darkColor: string) => {
+    return useColorModeValue(lightColor, darkColor)
+  }
+
   if (!user.firstName) {
     return <LoginForm />
   }
@@ -82,25 +86,25 @@ export default function CitrusJuicePars() {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr bg={useColorModeValue('green.200', 'green.900')}>
+            <Tr bg={HandleUseColorModeValue('green.200', 'green.900')}>
               <Td>Lime</Td>
               <Td>2 (L)</Td>
               <Td>2.75 (L)</Td>
               <Td>3 (L)</Td>
             </Tr>
-            <Tr bg={useColorModeValue('yellow.200', 'yellow.900')}>
+            <Tr bg={HandleUseColorModeValue('yellow.200', 'yellow.900')}>
               <Td>Lemon</Td>
               <Td>1.5 (L)</Td>
               <Td>2 (L)</Td>
               <Td>2.25 (L)</Td>
             </Tr>
-            <Tr bg={useColorModeValue('orange.200', 'orange.900')}>
+            <Tr bg={HandleUseColorModeValue('orange.200', 'orange.900')}>
               <Td>OJ ** </Td>
               <Td>1.5 (L)</Td>
               <Td>1.5 (L)</Td>
               <Td>1.5 (L)</Td>
             </Tr>
-            <Tr bg={useColorModeValue('red.200', 'red.900')}>
+            <Tr bg={HandleUseColorModeValue('red.200', 'red.900')}>
               <Td>GF **</Td>
               <Td>1.5 (L)</Td>
               <Td>1.5 (L)</Td>
