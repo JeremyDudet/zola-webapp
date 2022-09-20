@@ -25,11 +25,11 @@ const Home: NextPage = () => {
         user.alias ? user.alias : user.firstName
       }.`}</Heading>
       <Heading size="sm" pb={2}>
-        Just want to quickly say that this project is still in constructions.
+        I want to say that this project is still under development.
       </Heading>
       <Text>
         {
-          "You'll find a lot of tabs in the menu navigation that currently don't work. I'll be rolling out updates in the very near future."
+          "You'll find a lot of tabs in the menu navigation that currently don't work. I'll be rolling out updates very soon."
         }
       </Text>
     </>
