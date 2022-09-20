@@ -53,7 +53,7 @@ export default function JuiceRequestCard(props: Props) {
   }
 
   const formatedDate = (date: Date) => {
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       weekday: 'short',
       year: '2-digit',
       month: '2-digit',
