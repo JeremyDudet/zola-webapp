@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { useAuthContext } from '../../context/AuthContext'
+import LoginForm from '../../components/LoginForm'
 import {
   Table,
   Thead,
@@ -18,6 +20,7 @@ import { trpc } from '../../utils/trpc'
 import type { JuiceRequest, User } from '../../types'
 
 export default function CitrusJuicePars() {
+  const { user } = useAuthContext()
   const getJuiceRequests = trpc.useQuery(['juiceRequests.getJuiceRequests'])
   const getUsers = trpc.useQuery(['users.getUsers'])
   const [juiceRequests, setJuiceRequests] = useState<
@@ -53,6 +56,11 @@ export default function CitrusJuicePars() {
       )
     })
   }
+
+  if (!user.firstName) {
+    return <LoginForm />
+  }
+
   return (
     <>
       <Heading mb={8}>Daily Citrus</Heading>

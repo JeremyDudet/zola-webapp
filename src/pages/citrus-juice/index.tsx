@@ -6,8 +6,7 @@ import {
   Heading,
   useDisclosure,
   Divider,
-  Box,
-  Text
+  Box
 } from '@chakra-ui/react'
 import { BiMessageRoundedAdd } from 'react-icons/bi'
 import { useAuthContext } from '../../context/AuthContext'
