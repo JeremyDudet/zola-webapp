@@ -19,8 +19,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalContent,
-  Textarea,
-  Text
+  Textarea
 } from '@chakra-ui/react'
 import styled from '@emotion/styled'
 import { useAuthContext } from '../context/AuthContext'

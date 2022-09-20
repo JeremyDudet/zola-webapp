@@ -91,6 +91,14 @@ export interface NewJuiceRequest {
   notes: string | null
 }
 
+export interface JuiceRequestUpdate {
+  id: string
+  lemonAmount: number
+  orangeAmount: number
+  grapefruitAmount: number
+  notes: string | null
+}
+
 // model JuiceRequest {
 //   id                String   @id @default(cuid())
 //   requestFrom       User     @relation(name: "UserOnRequest", fields: [requestFromId], references: [id])

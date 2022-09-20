@@ -4,19 +4,21 @@ import {
   HStack,
   Button,
   Heading,
-  useDisclosure
+  useDisclosure,
+  Divider
 } from '@chakra-ui/react'
 import { BiMessageRoundedAdd } from 'react-icons/bi'
 import { useAuthContext } from '../../context/AuthContext'
 import LoginForm from '../../components/LoginForm'
 import NewJuiceRequestModal from '../../components/NewJuiceRequestModal'
 import JuiceRequestCard from '../../components/JuiceRequestCard'
-import type { JuiceRequest, NewJuiceRequest, User } from '../../types'
+import type { JuiceRequest, NewJuiceRequest, JuiceRequestUpdate, User } from '../../types'
 
 export default function Index() {
   const utils = trpc.useContext()
   const getUsers = trpc.useQuery(['users.getUsers'])
   const getJuiceRequests = trpc.useQuery(['juiceRequests.getJuiceRequests'])
+  const updateJuiceRequest = trpc.useMutation('juiceRequests.updateJuiceRequest')
   const deleteJuiceRequest = trpc.useMutation('juiceRequests.deleteJuiceRequest')
   const createNewJuiceRequest = trpc.useMutation('juiceRequests.createJuiceRequest')
   const [juiceRequests, setJuiceRequests] = useState<JuiceRequest[] | undefined>()
@@ -71,6 +73,43 @@ export default function Index() {
     [deleteJuiceRequest, utils]
   )
 
+  const handleUpdateJuiceRequest = useCallback(
+    async (data: JuiceRequestUpdate) => {
+      await updateJuiceRequest.mutateAsync(data, {
+        onSuccess: () => {
+          utils.invalidateQueries(['juiceRequests.getJuiceRequests'])
+        }
+      })
+    },
+    [updateJuiceRequest, utils]
+  )
+
+  const filterTodaysRequests = (requests: JuiceRequest[] | undefined) => {
+    const today = new Date()
+    const todaysRequests = requests?.filter((request) => {
+      const requestDate = new Date(request.createdAt)
+      return (
+        requestDate.getDate() === today.getDate() &&
+        requestDate.getMonth() === today.getMonth() &&
+        requestDate.getFullYear() === today.getFullYear()
+      )
+    })
+    return todaysRequests
+  }
+
+  const filterPastRequests = (requests: JuiceRequest[] | undefined) => {
+    const today = new Date()
+    const pastRequests = requests?.filter((request) => {
+      const requestDate = new Date(request.createdAt)
+      return (
+        requestDate.getDate() < today.getDate() ||
+        requestDate.getMonth() < today.getMonth() ||
+        requestDate.getFullYear() < today.getFullYear()
+      )
+    })
+    return pastRequests
+  }
+
 
   if (!user.firstName) {
     return <LoginForm />
@@ -79,14 +118,15 @@ export default function Index() {
   return (
     <>
       <NewJuiceRequestModal isOpen={isOpen} onClose={handleClose} onSubmit={handleCreateJuiceRequest} />
-      <HStack justify="space-between">
+      <HStack justify="space-between" mb={4}>
         <Heading>Citrus Juice</Heading>
         <Button leftIcon={<BiMessageRoundedAdd />} variant="outline" colorScheme="green" onClick={onOpen}>
           New Request
         </Button>
       </HStack>
-      <Heading size="md">Requests</Heading>
-      {juiceRequests?.map(juiceRequest => (
+      <Divider />
+      <Heading size="md" mt="4">{"Today's Requests"}</Heading>
+      {filterTodaysRequests(juiceRequests)?.map(juiceRequest => (
         <JuiceRequestCard
           users={users}
           id={juiceRequest.id}
@@ -97,8 +137,25 @@ export default function Index() {
           grapefruitAmount={juiceRequest.grapefruitAmount}
           notes={juiceRequest.notes}
           createdAt={juiceRequest.createdAt}
-          lastEdited={juiceRequest.lastEdited}
           onDelete={handleDeleteJuiceRequest}
+          handleUpdateJuiceRequest={handleUpdateJuiceRequest}
+        />
+      ))}
+      <Divider />
+      <Heading size="md" mt="4">{"Past Requests"}</Heading>
+      {filterPastRequests(juiceRequests)?.map(juiceRequest => (
+        <JuiceRequestCard
+          users={users}
+          id={juiceRequest.id}
+          key={juiceRequest.id}
+          requestedBy={juiceRequest.requestFromId}
+          lemonAmount={juiceRequest.lemonAmount}
+          orangeAmount={juiceRequest.orangeAmount}
+          grapefruitAmount={juiceRequest.grapefruitAmount}
+          notes={juiceRequest.notes}
+          createdAt={juiceRequest.createdAt}
+          onDelete={handleDeleteJuiceRequest}
+          handleUpdateJuiceRequest={handleUpdateJuiceRequest}
         />
       ))}
     </>

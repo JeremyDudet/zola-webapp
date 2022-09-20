@@ -42,6 +42,30 @@ export const juiceRequestsRouter = createRouter()
       })
     }
   })
+  .mutation("updateJuiceRequest", {
+    // validate input with Zod
+    input: z.object({
+      id: z.string(),
+      lemonAmount: z.number(),
+      orangeAmount: z.number(),
+      grapefruitAmount: z.number(),
+      notes: z.string().nullable(),
+    }),
+    async resolve({ ctx, input }) {
+      await ctx.prisma.juiceRequest.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          lemonAmount: input.lemonAmount,
+          orangeAmount: input.orangeAmount,
+          grapefruitAmount: input.grapefruitAmount,
+          notes: input.notes,
+        },
+      })
+    }
+  })
+
   .mutation("deleteJuiceRequest", {
     input: z.object({
       id: z.string(),

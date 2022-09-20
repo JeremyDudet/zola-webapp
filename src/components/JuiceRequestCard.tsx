@@ -6,13 +6,14 @@ import {
   IconButton,
   VStack,
   useDisclosure,
-  HStack
+  HStack,
+  Center
 } from '@chakra-ui/react'
 import AlertDeleteModal from './AlertDeleteModal'
 import UpdateJuiceRequestModal from './UpdateJuiceRequestModal'
 import styled from '@emotion/styled'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import type { User } from '../types'
+import type { JuiceRequestUpdate, User } from '../types'
 
 const StyledSpan = styled.span`
   color: gray;
@@ -29,8 +30,8 @@ interface Props {
   grapefruitAmount: number
   notes: string | null
   createdAt: Date
-  lastEdited: Date
   onDelete: (id: string) => void
+  handleUpdateJuiceRequest: (data: JuiceRequestUpdate) => void
 }
 
 export default function JuiceRequestCard(props: Props) {
@@ -51,6 +52,18 @@ export default function JuiceRequestCard(props: Props) {
     return amount > 1 ? 's' : ''
   }
 
+  const formatedDate = (date: Date) => {
+    const options = {
+      weekday: 'short',
+      year: '2-digit',
+      month: '2-digit',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }
+    return new Date(date).toLocaleDateString('en-US', options)
+  }
+
   return (
     <>
       <AlertDeleteModal
@@ -61,7 +74,16 @@ export default function JuiceRequestCard(props: Props) {
         id={props.id}
         actionDescriptor="Delete Request"
       />
-      <UpdateJuiceRequestModal isOpen={isUpdateOpen} onClose={onUpdateClose} />
+      <UpdateJuiceRequestModal
+        isOpen={isUpdateOpen}
+        onClose={onUpdateClose}
+        id={props.id}
+        lemonAmount={props.lemonAmount}
+        orangeAmount={props.orangeAmount}
+        grapefruitAmount={props.grapefruitAmount}
+        notes={props.notes}
+        handleUpdateJuiceRequest={props.handleUpdateJuiceRequest}
+      />
       <Flex p={38} w="full" alignItems="center" justifyContent="center">
         <Box
           w="md"
@@ -75,27 +97,40 @@ export default function JuiceRequestCard(props: Props) {
           shadow="lg"
           rounded="lg"
         >
+          <Box mb="4">
+            <StyledSpan>{formatedDate(props.createdAt)}</StyledSpan>
+          </Box>
           {props.lemonAmount === 0 &&
           props.orangeAmount === 0 &&
           props.grapefruitAmount === 0 ? (
             <>
-              <StyledSpan>No juice needed!</StyledSpan>
+              <Center>
+                <StyledSpan>No juice needed!</StyledSpan>
+              </Center>
               <VStack alignItems="flex-end" pr="2rem" py="1.2rem">
                 <StyledSpan>{`...thank you. `}</StyledSpan>
                 <StyledSpan>{`- ${
                   user?.alias ? user?.alias : user?.firstName
                 }`}</StyledSpan>
               </VStack>
+              {props.notes ? (
+                <Box alignItems="flex-start">
+                  <StyledSpan>{`PS: `}</StyledSpan>
+                  <StyledSpan>{props.notes}</StyledSpan>
+                </Box>
+              ) : null}
             </>
           ) : (
             <>
               <Box pb="1.5rem">
-                <StyledSpan>Please, for tomorrow may I have:</StyledSpan>
+                <StyledSpan>May I please have:</StyledSpan>
               </Box>
               <VStack alignItems="center">
                 <HStack justifyContent="flex-start">
                   {props.lemonAmount ? (
-                    <Text>{`${props.lemonAmount} quart${determineIfPlural(
+                    <Text fontWeight="semibold">{`${
+                      props.lemonAmount
+                    } quart${determineIfPlural(
                       props.lemonAmount
                     )} of lemon juice${props.orangeAmount ? ',' : ''}`}</Text>
                   ) : null}
@@ -117,7 +152,7 @@ export default function JuiceRequestCard(props: Props) {
                   ) : null}
                 </Box>
               </VStack>
-              <VStack alignItems="flex-end" pr="2rem" py="1.2rem">
+              <VStack alignItems="flex-end">
                 <StyledSpan>{`...thank you. `}</StyledSpan>
                 <StyledSpan>{`- ${
                   user?.alias ? user?.alias : user?.firstName

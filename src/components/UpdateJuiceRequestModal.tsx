@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -23,7 +23,7 @@ import {
 import styled from '@emotion/styled'
 import { useAuthContext } from '../context/AuthContext'
 import LoginForm from './LoginForm'
-import type { JuiceRequest, NewJuiceRequest } from '../types'
+import type { JuiceRequestUpdate } from '../types'
 
 const StyledSpanStart = styled.div`
   color: gray;
@@ -37,33 +37,89 @@ const StyledSpanEnd = styled.div`
 `
 
 interface Props {
+  id: string
+  lemonAmount: number
+  orangeAmount: number
+  grapefruitAmount: number
+  notes: string | null
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: NewJuiceRequest) => void
+  handleUpdateJuiceRequest: (data: JuiceRequestUpdate) => void
 }
 
 export default function UpdateJuiceRequestModal({
+  id,
+  lemonAmount,
+  orangeAmount,
+  grapefruitAmount,
+  notes,
   isOpen,
   onClose,
-  onSubmit
+  handleUpdateJuiceRequest
 }: Props) {
   const { user } = useAuthContext()
-  const [lemonJuice, setLemonJuice] = useState(0)
-  const [orangeJuice, setOrangeJuice] = useState(0)
-  const [grapefruitJuice, setGrapefruitJuice] = useState(0)
-  const [notes, setNotes] = useState<string | null>(null)
-  // const [notes, setNotes] = useState('')
+  const [lemonJuice, setLemonJuice] = useState(lemonAmount)
+  const [orangeJuice, setOrangeJuice] = useState(orangeAmount)
+  const [grapefruitJuice, setGrapefruitJuice] = useState(grapefruitAmount)
+  const [newNotes, setNewNotes] = useState<string | null>(notes)
+  const [isWriting, setIsWriting] = useState(false)
+
+  // handle isWriting state
+  useEffect(() => {
+    if (
+      lemonJuice !== lemonAmount ||
+      orangeJuice !== orangeAmount ||
+      grapefruitJuice !== grapefruitAmount ||
+      newNotes !== notes
+    ) {
+      setIsWriting(true)
+    } else {
+      setIsWriting(false)
+    }
+  }, [
+    lemonJuice,
+    orangeJuice,
+    grapefruitJuice,
+    newNotes,
+    lemonAmount,
+    orangeAmount,
+    grapefruitAmount,
+    notes
+  ])
 
   const HandleColorModeChange = (light: string, dark: string) => {
     return useColorModeValue(light, dark)
   }
 
   const handleClose = () => {
-    onClose()
+    const resetForm = () => {
+      setLemonJuice(lemonAmount)
+      setOrangeJuice(orangeAmount)
+      setGrapefruitJuice(grapefruitAmount)
+      setNewNotes(notes)
+    }
+    if (isWriting) {
+      const confirmation = window.confirm(
+        'Are you sure you want to close this modal? All changes will be lost.'
+      )
+      if (confirmation) {
+        resetForm()
+        onClose()
+      }
+    } else {
+      onClose()
+    }
   }
 
-  const handleSubmit = () => {
-    console.log('submitting')
+  const onUpdate = () => {
+    handleUpdateJuiceRequest({
+      id,
+      lemonAmount: lemonJuice,
+      orangeAmount: orangeJuice,
+      grapefruitAmount: grapefruitJuice,
+      notes: notes
+    })
+    onClose()
   }
 
   if (!user.firstName) {
@@ -189,19 +245,8 @@ export default function UpdateJuiceRequestModal({
             <Button colorScheme="gray" mr={3} onClick={handleClose}>
               Cancel
             </Button>
-            <Button
-              colorScheme="green"
-              onClick={() =>
-                onSubmit({
-                  requestFromId: user.id,
-                  lemonAmount: lemonJuice,
-                  orangeAmount: orangeJuice,
-                  grapefruitAmount: grapefruitJuice,
-                  notes
-                })
-              }
-            >
-              Submit
+            <Button variant="outline" colorScheme="blue" onClick={onUpdate}>
+              Update
             </Button>
           </ModalFooter>
         </ModalContent>

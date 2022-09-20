@@ -110,11 +110,11 @@ function UpdateUserModal({
   }
 
   const handleClose = () => {
-    const clearForm = () => {
-      setNewFirstName('')
-      setNewLastName('')
-      setNewAlias('')
-      setNewPassword('')
+    const resetForm = () => {
+      setNewFirstName(firstName)
+      setNewLastName(lastName)
+      setNewAlias(alias)
+      setNewPassword(password)
       setNewAuthLevel(authLevel)
     }
     if (isWriting) {
@@ -122,7 +122,7 @@ function UpdateUserModal({
         'Are you sure you want to close this modal? All changes will be lost.'
       )
       if (confirmation) {
-        clearForm()
+        resetForm()
         onClose()
       }
     } else {
