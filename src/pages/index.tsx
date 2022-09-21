@@ -6,7 +6,7 @@
 
 import { Heading, Text } from '@chakra-ui/react'
 import type { NextPage } from 'next'
-import { trpc } from '../utils/trpc'
+// import { trpc } from '../utils/trpc'
 import { useAuthContext } from '../context/AuthContext' // import User state
 import LoginForm from '../components/LoginForm'
 
@@ -15,7 +15,7 @@ import LoginForm from '../components/LoginForm'
 
 const Home: NextPage = () => {
   const { user } = useAuthContext()
-  const userQuery = trpc.useQuery(['users.getUsers'])
+  // const userQuery = trpc.useQuery(['users.getUsers'])
 
   if (!user.firstName) return <LoginForm /> // if user is not logged in, return Auth component
 

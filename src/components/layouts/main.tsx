@@ -237,13 +237,17 @@ const Main = ({ children, router }: MainProps) => {
         </NavItem>
         <BarAuthOnly user={user}>
           <SidebarHeading>Bar</SidebarHeading>
-          <NavItem icon={GiCutLemon} path={path} href="/citrus-juice/pars">
+          <NavItem icon={GiCutLemon} path={path} href="/citrus-juice-pars">
             Daily Citrus
           </NavItem>
         </BarAuthOnly>
         <KitchenAuthOnly user={user}>
           <SidebarHeading>Kitchen</SidebarHeading>
-          <NavItem icon={GiManualJuicer} path={path} href="/citrus-juice">
+          <NavItem
+            icon={GiManualJuicer}
+            path={path}
+            href="/request-citrus-juice"
+          >
             Citrus Juice
           </NavItem>
         </KitchenAuthOnly>
