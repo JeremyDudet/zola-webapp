@@ -18,7 +18,6 @@ import Logo from '../Logo'
 import NextLink from 'next/link'
 import ThemeToggleButton from '../theme-toggle-button'
 import { useAuthContext } from '../../context/AuthContext'
-import AdminAuthOnly from '../AdminAuthOnly'
 import {
   Box,
   Flex,
@@ -36,13 +35,14 @@ import { BsCheck2Square } from 'react-icons/bs'
 import { BiFoodMenu, BiChair, BiEdit } from 'react-icons/bi'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { useDisclosure, useColorModeValue } from '@chakra-ui/react'
-import { FaCocktail } from 'react-icons/fa'
+import { FaCocktail, FaUsers } from 'react-icons/fa'
 import { MdHome, MdLiquor } from 'react-icons/md'
 import { ImShuffle } from 'react-icons/im'
 import { Router } from 'next/router'
 import { IconType } from 'react-icons'
 import { IoIosWine, IoIosBeer } from 'react-icons/io'
-import KitchenAuthOnly from '../AdminAuthOnly'
+import AdminAuthOnly from '../AdminAuthOnly'
+import KitchenAuthOnly from '../KitchenAuthOnly'
 import BarAuthOnly from '../BarAuthOnly'
 
 interface MainProps {
@@ -238,7 +238,7 @@ const Main = ({ children, router }: MainProps) => {
         <BarAuthOnly user={user}>
           <SidebarHeading>Bar</SidebarHeading>
           <NavItem icon={GiCutLemon} path={path} href="/citrus-juice-pars">
-            Daily Citrus
+            Daily Juice Pars
           </NavItem>
         </BarAuthOnly>
         <KitchenAuthOnly user={user}>
@@ -248,12 +248,12 @@ const Main = ({ children, router }: MainProps) => {
             path={path}
             href="/request-citrus-juice"
           >
-            Citrus Juice
+            Request Citrus Juice
           </NavItem>
         </KitchenAuthOnly>
         <AdminAuthOnly user={user}>
           <SidebarHeading>Admin</SidebarHeading>
-          <NavItem icon={BiEdit} path={path} href="/users/admin">
+          <NavItem icon={FaUsers} path={path} href="/users/admin">
             Users
           </NavItem>
           <NavItem icon={BiEdit} path={path} href="/roles/admin">
