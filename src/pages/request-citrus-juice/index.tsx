@@ -1,3 +1,8 @@
+/*
+  Requests will show up in Citrus Juice Pars page 
+  if they're ordered the night before or ordered the same day before 12pm.
+*/
+
 import { useState, useEffect, useCallback } from 'react'
 import { trpc } from '../../utils/trpc'
 import {

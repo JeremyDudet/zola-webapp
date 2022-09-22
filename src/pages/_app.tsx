@@ -9,6 +9,7 @@ import ClientOnly from '../components/ClientOnly'
 import theme from '../lib/theme'
 import superjson from 'superjson'
 import { AppProps } from 'next/app'
+import Head from 'next/head'
 
 // Here we connect our backend to our frontend.
 // Here we configure tRPC and React Query.
@@ -23,6 +24,10 @@ import { AppProps } from 'next/app'
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
   return (
     <ChakraProvider theme={theme}>
+      <Head>
+        <title>BarZola</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Fonts />
       <AuthProvider>
         <ClientOnly>
