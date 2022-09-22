@@ -74,7 +74,12 @@ export default function CitrusJuicePars() {
         )
       })
       return [...yesterdayAfternoon, ...todayBeforeNoon]
-    } // else if today is Tuesday, return all requests from Saturday (afternoon), Sunday (all day), and Monday (all day)
+    } // else if today is Tuesday,
+    // return all requests
+    // from Saturday (afternoon),
+    // Sunday (all day),
+    // Monday (all day),
+    // and Tuesday (before noon)
     else if (today.getDay() === 2) {
       const saturday = new Date()
       saturday.setDate(today.getDate() - 2)
@@ -107,7 +112,21 @@ export default function CitrusJuicePars() {
           requestDate.getFullYear() === monday.getFullYear()
         )
       })
-      return [...saturdayRequests, ...sundayRequests, ...mondayRequests]
+      const tuesdayBeforeNoon = requests.filter(request => {
+        const requestDate = new Date(request.createdAt)
+        return (
+          requestDate.getHours() < 12 && // before 12pm
+          requestDate.getDate() === today.getDate() &&
+          requestDate.getMonth() === today.getMonth() &&
+          requestDate.getFullYear() === today.getFullYear()
+        )
+      })
+      return [
+        ...saturdayRequests,
+        ...sundayRequests,
+        ...mondayRequests,
+        ...tuesdayBeforeNoon
+      ]
     }
   }
 
