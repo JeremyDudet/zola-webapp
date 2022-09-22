@@ -29,7 +29,7 @@ const Home: NextPage = () => {
       </Heading>
       <Text>
         {
-          "You'll find a lot of tabs in the menu navigation that currently don't work. I'll be rolling out updates very soon."
+          "You'll find a lot of tabs in the menu navigation that currently don't work. I'll be rolling out updates soon."
         }
       </Text>
     </>

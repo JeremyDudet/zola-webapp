@@ -11,7 +11,9 @@ import {
   Heading,
   useDisclosure,
   Divider,
-  Box
+  Box,
+  Text,
+  useColorModeValue
 } from '@chakra-ui/react'
 import { BiMessageRoundedAdd } from 'react-icons/bi'
 import { useAuthContext } from '../../context/AuthContext'
@@ -26,6 +28,7 @@ import type {
 } from '../../types'
 
 export default function Index() {
+  const HandleColorModeChange = useColorModeValue('gray.600', 'gray.400')
   const utils = trpc.useContext()
   const getUsers = trpc.useQuery(['users.getUsers'])
   const getJuiceRequests = trpc.useQuery(['juiceRequests.getJuiceRequests'])
@@ -138,7 +141,7 @@ export default function Index() {
         onSubmit={handleCreateJuiceRequest}
       />
       <HStack justify="space-between" mb={4}>
-        <Heading>Citrus Juice</Heading>
+        <Heading>Juice Orders</Heading>
         <Button
           leftIcon={<BiMessageRoundedAdd />}
           variant="outline"
@@ -148,11 +151,16 @@ export default function Index() {
           New Request
         </Button>
       </HStack>
-      <Divider />
+      <Text fontSize="sm" color={HandleColorModeChange} mb={8}>
+        Input your order the night before or before 12 pm on the day of.
+      </Text>
       <Heading size="md" mt="4">
         {"Today's Requests"}
       </Heading>
-      <Box>
+      <Text fontSize="sm" color="gray.500">
+        {juiceRequests?.length} request(s)
+      </Text>
+      <Box mb={4}>
         {filterTodaysRequests(juiceRequests)?.map(juiceRequest => (
           <JuiceRequestCard
             users={users}

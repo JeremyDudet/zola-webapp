@@ -118,9 +118,7 @@ export default function NewJuiceRequestModal({
           <ModalCloseButton />
           <ModalBody>
             <Box pb="1.5rem">
-              <StyledSpanStart>
-                Please, for tomorrow may I have...
-              </StyledSpanStart>
+              <StyledSpanStart>Please, may I have...</StyledSpanStart>
             </Box>
             <FormControl>
               <HStack

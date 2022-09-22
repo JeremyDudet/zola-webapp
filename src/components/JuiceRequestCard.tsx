@@ -53,29 +53,15 @@ export default function JuiceRequestCard(props: Props) {
   }
 
   const formatedDate = (date: Date) => {
-    const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-
-    const month = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ]
-    const dayOfMonth = date.getDate()
-    const day = date.getDay()
-    const getMonth = date.getMonth()
-    const shortyear = date.getFullYear().toString().substr(-2)
-    const hour = date.getHours()
-    const minute = date.getMinutes()
-    return `${dayOfWeek[day]}, ${month[getMonth]} ${dayOfMonth}, '${shortyear} at ${hour}:${minute}`
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
+      year: '2-digit',
+      month: '2-digit',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }
+    return new Date(date).toLocaleDateString('en-US', options)
   }
 
   return (

@@ -13,7 +13,8 @@ import {
   TableContainer,
   useColorModeValue,
   Box,
-  Divider
+  Divider,
+  Center
 } from '@chakra-ui/react'
 import ViewOnlyJuiceRequestCard from '../../components/JuiceRequestCardViewOnly'
 import { trpc } from '../../utils/trpc'
@@ -43,19 +44,74 @@ export default function CitrusJuicePars() {
     if (getUsers.isFetched) setUsers(getUsers.data)
   }, [getUsers.data, getUsers.isFetched, getUsers.isFetching])
 
-  const filterYesterdaysRequests = (requests: JuiceRequest[] | undefined) => {
+  // grab requests that were made the night before, or the same day before
+  // if today's Tuesday, grab all requests from Saturday, Sunday, and Monday
+  const filterTimelyRequests = (requests: JuiceRequest[] | undefined) => {
+    // if there are no requests, return an empty array
     if (!requests) return []
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-    return requests.filter(request => {
-      const requestDate = new Date(request.createdAt)
-      return (
-        requestDate.getDate() === yesterday.getDate() &&
-        requestDate.getMonth() === yesterday.getMonth() &&
-        requestDate.getFullYear() === yesterday.getFullYear()
-      )
-    })
+    const today = new Date() // today's date
+    const yesterday = new Date() // yesterday's date
+    yesterday.setDate(today.getDate() - 1)
+
+    // if today isn't Tuesday, return all requests from yesterday afternoon and today morning
+    if (today.getDay() !== 2) {
+      const yesterdayAfternoon = requests.filter(request => {
+        const requestDate = new Date(request.createdAt)
+        return (
+          requestDate.getHours() > 12 && // after 12pm
+          requestDate.getDate() === yesterday.getDate() &&
+          requestDate.getMonth() === yesterday.getMonth() &&
+          requestDate.getFullYear() === yesterday.getFullYear()
+        )
+      })
+      const todayBeforeNoon = requests?.filter(request => {
+        const requestDate = new Date(request.createdAt)
+        return (
+          requestDate.getHours() < 12 && // before 12pm
+          requestDate.getDate() === today.getDate() &&
+          requestDate.getMonth() === today.getMonth() &&
+          requestDate.getFullYear() === today.getFullYear()
+        )
+      })
+      return [...yesterdayAfternoon, ...todayBeforeNoon]
+    } // else if today is Tuesday, return all requests from Saturday (afternoon), Sunday (all day), and Monday (all day)
+    else if (today.getDay() === 2) {
+      const saturday = new Date()
+      saturday.setDate(today.getDate() - 2)
+      const sunday = new Date()
+      sunday.setDate(today.getDate() - 3)
+      const monday = new Date()
+      monday.setDate(today.getDate() - 1)
+      const saturdayRequests = requests.filter(request => {
+        const requestDate = new Date(request.createdAt)
+        return (
+          requestDate.getHours() > 12 && // after 12pm
+          requestDate.getDate() === saturday.getDate() &&
+          requestDate.getMonth() === saturday.getMonth() &&
+          requestDate.getFullYear() === saturday.getFullYear()
+        )
+      })
+      const sundayRequests = requests.filter(request => {
+        const requestDate = new Date(request.createdAt)
+        return (
+          requestDate.getDate() === sunday.getDate() &&
+          requestDate.getMonth() === sunday.getMonth() &&
+          requestDate.getFullYear() === sunday.getFullYear()
+        )
+      })
+      const mondayRequests = requests.filter(request => {
+        const requestDate = new Date(request.createdAt)
+        return (
+          requestDate.getDate() === monday.getDate() &&
+          requestDate.getMonth() === monday.getMonth() &&
+          requestDate.getFullYear() === monday.getFullYear()
+        )
+      })
+      return [...saturdayRequests, ...sundayRequests, ...mondayRequests]
+    }
   }
+
+  const timelyRequests = filterTimelyRequests(juiceRequests)
 
   const HandleUseColorModeValue = (lightColor: string, darkColor: string) => {
     return useColorModeValue(lightColor, darkColor)
@@ -69,7 +125,7 @@ export default function CitrusJuicePars() {
     <>
       <Heading mb={8}>Daily Citrus</Heading>
       <Heading size="md" mb={4}>
-        Default Pars
+        Default Pars:
       </Heading>
       <TableContainer pb="1.5rem">
         <Table size="sm" variant="simple">
@@ -115,8 +171,15 @@ export default function CitrusJuicePars() {
       </TableContainer>
       <Divider />
       <Box mt={6}>
-        <Heading size="md">{"Last Night's Kitchen Requests"}</Heading>
-        {filterYesterdaysRequests(juiceRequests)?.map(juiceRequest => (
+        <Heading size="md">{"Kitchen's Citrus Juice Requests:"}</Heading>
+        {timelyRequests?.length === 0 && (
+          <Center mt={12}>
+            <Heading size="sm" color={'gray.500'} fontStyle="italic">
+              No requests were made...
+            </Heading>
+          </Center>
+        )}
+        {timelyRequests?.map(juiceRequest => (
           <ViewOnlyJuiceRequestCard
             users={users}
             id={juiceRequest.id}
