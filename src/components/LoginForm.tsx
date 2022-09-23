@@ -202,7 +202,7 @@ export default function LoginForm() {
           maxW="45px"
           maxLength={1}
           size="lg"
-          pattern={'/[0-9]/'}
+          pattern="\d*" // only allow numbers
           as="input"
           ref={firstPinInput}
           value={firstPin}
@@ -211,6 +211,7 @@ export default function LoginForm() {
           onChange={e => setFirstPin(e.target.value)}
         />
         <Input
+          pattern="\d*" // only allow numbers
           maxW="45px"
           size="lg"
           maxLength={1}
@@ -221,6 +222,7 @@ export default function LoginForm() {
           onChange={e => setSecondPin(e.target.value)}
         />
         <Input
+          pattern="\d*" // only allow numbers
           maxW="45px"
           size="lg"
           maxLength={1}
@@ -231,6 +233,7 @@ export default function LoginForm() {
           onChange={e => setThirdPin(e.target.value)}
         />
         <Input
+          pattern="\d*" // only allow numbers
           maxW="45px"
           size="lg"
           maxLength={1}
