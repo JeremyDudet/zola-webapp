@@ -97,9 +97,13 @@ export default function Index({ dish }: Props) {
       <Flex flexDirection="column">
         <Flex alignItems="start" gap="10px">
           <Box
+            minW="3rem"
+            minH="3rem"
+            maxW="3rem"
+            maxH="3rem"
             width="3rem"
             height="3rem"
-            borderRadius="full"
+            borderRadius="50%"
             overflow="hidden"
             position="relative"
             boxShadow="base"
@@ -108,8 +112,8 @@ export default function Index({ dish }: Props) {
               src={IMAGE}
               layout="responsive"
               alt="picture of food"
-              width="100%"
-              height="100%"
+              width="3rem"
+              height="3rem"
             />
           </Box>
           <Flex flexDir="column" width="100%" height="100%">
@@ -124,6 +128,7 @@ export default function Index({ dish }: Props) {
               <Text
                 justifySelf="flex-end"
                 fontSize="14px"
+                fontWeight="semibold"
               >{`${dish.price}`}</Text>
             </Flex>
             <Text fontSize="xs" textTransform="uppercase">
