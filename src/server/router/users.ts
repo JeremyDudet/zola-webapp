@@ -39,7 +39,7 @@ export const usersRouter = createRouter()
     input: z.object({ 
       firstName: z.string(), 
       lastName: z.string(), 
-      alias: z.string(), 
+      alias: z.string().optional(), 
       password: z.string().max(4), 
       auth: z.string()
     }),

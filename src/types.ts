@@ -99,6 +99,65 @@ export interface JuiceRequestUpdate {
   notes: string | null
 }
 
+export interface Allergen {
+  id: string
+  name: string
+  description: string
+  components?: Component[]
+  dishes?: Dish[]
+}
+
+export interface Component {
+  id: string
+  name: string
+  description: string
+  removable: boolean
+  allergens?: Allergen[]
+  dish: Dish
+  dishId: string
+}
+
+export interface Dish {
+  id: string
+  name: string
+  description: string
+  advertisedDescription: string
+  price: number
+  components?: Component[]
+  menu?: Menu
+  menuSection?: MenuSection
+  allergens?: Allergen[]
+}
+
+export interface NewDish {
+  id: string
+  name: string
+  description: string
+  price: number
+  menu?: Menu
+  menuSection?: MenuSection
+  allergens?: Allergen[]
+}
+
+export interface MenuSection {
+  id: string
+  name: string
+  description: string
+  dishes?: Dish[]
+  menu: Menu
+  menuId: string
+}
+
+export interface Menu {
+  forEach(arg0: (menu: Menu, index?: number) => void): unknown
+  length: number
+  id: string
+  name: string
+  description: string
+  dishes?: Dish[]
+  menuSection?: MenuSection[]
+}
+
 // model JuiceRequest {
 //   id                String   @id @default(cuid())
 //   requestFrom       User     @relation(name: "UserOnRequest", fields: [requestFromId], references: [id])

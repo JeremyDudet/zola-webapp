@@ -18,7 +18,7 @@ export default function Index() {
   return (
     <Box display="flex" flexDirection="column" mt={10} gap="2rem">
       <Box>
-        <Heading>Bar</Heading>
+        <Heading>Bar and Lounge</Heading>
         <Image layout="responsive" src={bar_map} alt="dinning room map" />
       </Box>
       <Box>

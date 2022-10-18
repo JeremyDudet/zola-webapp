@@ -54,12 +54,13 @@ model User {
   id              String         @id @default(cuid())
   firstName       String
   lastName        String
-  alias           String
+  alias           String?
   password        String         @unique
   auth            String         @default("user")
   roles           Role[] // many roles can belong to one user
   locked          Boolean        @default(false)
   juiceRequested  JuiceRequest[] @relation("UserOnRequest")
+  dishEdited      Dish[]         @relation("UserOnDish") // many dishes can be edited by one user
 
   @@unique([firstName, lastName, password])
 }
@@ -104,4 +105,71 @@ model JuiceRequest {
   notes             String?
   createdAt         DateTime @default(now())
   lastEdited        DateTime @updatedAt
+}
+
+model Menu {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  lastEdited  DateTime @updatedAt
+  dishes      Dish[] // one menu can have many dishes
+  menuSections MenuSection[] // one menu can have many menu sections
+}
+
+model MenuSection {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  lastEdited  DateTime @updatedAt
+  dishes      Dish[] // one menu section can have many dishes
+  menus        Menu    @relation(fields: [menuId], references: [id]) // a menu section can only belong to one menu
+  menuId      String
+}
+
+model Dish {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  advertisedDescription String?
+  components Component[] // many components can belong to one dish
+  price       Float
+  createdAt   DateTime @default(now())
+  lastEdited  DateTime @updatedAt
+  lastEditedBy User    @relation(name: "UserOnDish", fields: [lastEditedById], references: [id]) // a dish can only be edited by one user
+  lastEditedById String
+  menu        Menu[] // a dish can belong to many menus
+  menuSection MenuSection[] // a dish can belong to many menu sections
+}
+
+model Component {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  removable   Boolean
+  allergens    Allergen[] // many components can have many allergies
+  ingredients Ingredient[] // many components can have many ingredients
+  createdAt   DateTime @default(now())
+  lastEdited  DateTime @updatedAt
+  dish        Dish     @relation(fields: [dishId], references: [id]) // a component can only belong to one dish
+  dishId      String 
+}
+
+model Allergen {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  components  Component[] // many components can have many allergies
+  createdAt   DateTime @default(now())
+  lastEdited  DateTime @updatedAt
+}
+
+model Ingredient {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  components  Component[] // many components can have many ingredients
+  createdAt   DateTime @default(now())
+  lastEdited  DateTime @updatedAt
 }
