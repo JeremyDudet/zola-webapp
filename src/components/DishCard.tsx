@@ -41,10 +41,6 @@ export default function Index({ dish }: Props) {
     return (menuString += ' menu')
   }
 
-  const menuSection = () => {
-    return dish?.menuSection[0].name
-  }
-
   // this function returns an array of components
   //   const componentList = () => {
   //     const components = dish.components
