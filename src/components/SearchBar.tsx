@@ -10,7 +10,7 @@ interface Props {
 
 function SearchBar({ search, setSearch, placeholder }: Props) {
   return (
-    <Stack>
+    <Stack pb="4">
       <InputGroup>
         <InputLeftElement pointerEvents="none">
           <SearchIcon color="gray.300" />

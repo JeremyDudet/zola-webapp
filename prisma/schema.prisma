@@ -141,6 +141,7 @@ model Dish {
   lastEditedById String
   menu        Menu[] // a dish can belong to many menus
   menuSection MenuSection[] // a dish can belong to many menu sections
+  photoId     String?
 }
 
 model Component {

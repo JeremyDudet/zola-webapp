@@ -35,6 +35,7 @@ import LoginForm from '../../components/LoginForm'
 import NewDishModal from '../../components/NewDishModal'
 import { useAuthContext } from '../../context/AuthContext'
 import type { Dish, NewDish } from '../../types'
+import UpdateFoodNoteModal from '../../components/UpdateFoodNoteModal'
 
 export default function Index() {
   const { user } = useAuthContext()
@@ -45,7 +46,6 @@ export default function Index() {
   const deleteDish = trpc.useMutation('dishes.deleteDish')
   const [search, setSearch] = useState<string>('')
   const [dishes, setDishes] = useState<Dish[] | undefined>()
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   // this updates the UI when the userQuery data is first loaded.
   useEffect(() => {
@@ -99,15 +99,9 @@ export default function Index() {
         onClose={onClose}
       /> */}
       <Stack>
-        {console.log('dishes', dishes)}
         <Flex justify="space-between">
           <Heading>{'Food Notes'}</Heading>
-          <Button
-            variant="outline"
-            leftIcon={<AddIcon />}
-            colorScheme="green"
-            onClick={onOpen}
-          >
+          <Button variant="outline" leftIcon={<AddIcon />} colorScheme="green">
             New Dish
           </Button>
         </Flex>

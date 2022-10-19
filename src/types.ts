@@ -2,7 +2,7 @@ export interface User {
   id: string
   firstName: string
   lastName: string
-  alias: string
+  alias: string | null
   password: string
   auth: string
 }

@@ -1,22 +1,16 @@
 import Image from 'next/image'
-import {
-  Box,
-  Center,
-  Heading,
-  Text,
-  Stack,
-  useColorModeValue,
-  UnorderedList,
-  ListItem,
-  Flex
-} from '@chakra-ui/react'
-import { Dish, Menu, Component, MenuSection } from '../types'
+import UpdateFoodNoteModal from './UpdateFoodNoteModal'
+import { useLongPress } from 'use-long-press'
+import { Box, Heading, Text, Flex, useDisclosure } from '@chakra-ui/react'
+import { Dish, Menu } from '../types'
 
 interface Props {
   dish: Dish
 }
 
 export default function Index({ dish }: Props) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const IMAGE =
     'https://res.cloudinary.com/zola-barzola/image/upload/v1665788285/IMG_8139_kod9jp.jpg'
 
@@ -92,9 +86,14 @@ export default function Index({ dish }: Props) {
   //     return allergenString
   //   }
 
+  const bind = useLongPress(() => {
+    onOpen()
+  })
+
   return (
     <>
-      <Flex flexDirection="column">
+      <UpdateFoodNoteModal isOpen={isOpen} onClose={onClose} />
+      <Flex flexDirection="column" {...bind()}>
         <Flex alignItems="start" gap="10px">
           <Box
             minW="3rem"
@@ -121,6 +120,7 @@ export default function Index({ dish }: Props) {
               justifyContent="space-between"
               alignItems="center"
               width="100%"
+              marginTop="-3px"
             >
               <Heading fontSize="lg" textTransform="uppercase">
                 {dish.name}
