@@ -3,7 +3,8 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader
+  ModalHeader,
+  ModalBody
 } from '@chakra-ui/react'
 
 interface Props {
@@ -12,6 +13,28 @@ interface Props {
 }
 
 function UpdateFoodNoteModal(props: Props) {
+  const [files, setFiles] = React.useState<FileList | null>()
+
+  const uploadImage = (files: FileList | null | undefined) => {
+    const data: any = new FormData()
+    if (files) {
+      data.append('file', files[0])
+    } else {
+      return
+    }
+    data.append('upload_preset', 'faoqsdvt')
+    fetch('https://api.cloudinary.com/v1_1/zola-barzola/image/upload', {
+      method: 'POST',
+      body: data
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
   return (
     <Modal
       blockScrollOnMount={true}
@@ -21,8 +44,17 @@ function UpdateFoodNoteModal(props: Props) {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Update Food Note</ModalHeader>
+        <ModalBody>
+          <p>Update Food Note</p>
+          <input
+            type="file"
+            onChange={event => {
+              setFiles(event.target.files)
+            }}
+          />
+          <button onClick={() => uploadImage(files)}>Upload Image</button>
+        </ModalBody>
       </ModalContent>
-      UpdateFoodNoteModal
     </Modal>
   )
 }
