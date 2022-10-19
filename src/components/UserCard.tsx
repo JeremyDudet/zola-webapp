@@ -28,7 +28,6 @@ import { User } from '../types'
 interface Props {
   handleUserDelete: (uid: string) => void
   handleUserUpdate: (data: User) => void
-  setUsers: (users: User[]) => void
   uid: string
   firstName: string
   lastName: string

@@ -5,31 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { trpc } from '../../utils/trpc'
-import {
-  Heading,
-  HStack,
-  Stack,
-  Flex,
-  Button,
-  Spinner,
-  useDisclosure,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverCloseButton,
-  IconButton,
-  Table,
-  Tbody,
-  Td,
-  Tr,
-  Center
-} from '@chakra-ui/react'
+import { Heading, Stack, Flex, Button, Spinner, Center } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import SearchBar from '../../components/SearchBar'
 import DishCard from '../../components/DishCard'

@@ -29,7 +29,7 @@
 
 */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { trpc } from '../../utils/trpc'
 import {
   Heading,
@@ -72,7 +72,6 @@ export default function Index() {
   const deleteUser = trpc.useMutation('users.deleteUser')
   const [authFilter, setAuthFilter] = useState<string>('all')
   const [search, setSearch] = useState<string>('')
-  const [users, setUsers] = useState<User[] | undefined>()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
     isOpen: isPopOverOpen,
@@ -81,10 +80,10 @@ export default function Index() {
   } = useDisclosure()
 
   // this updates the UI when the userQuery data is first loaded.
-  useEffect(() => {
-    if (getUsers.isFetching) setUsers(undefined)
-    if (getUsers.isFetched) setUsers(getUsers.data)
-  }, [getUsers.data, getUsers.isFetched, getUsers.isFetching])
+  // useEffect(() => {
+  //   if (getUsers.isFetching) setUsers(undefined)
+  //   if (getUsers.isFetched) setUsers(getUsers.data)
+  // }, [getUsers.data, getUsers.isFetched, getUsers.isFetching])
 
   const handleUserDelete = useCallback(
     async (uid: string) => {
@@ -127,7 +126,7 @@ export default function Index() {
   }
 
   // this filters users by the radio buttons
-  const filteredUsers = users?.filter(user => {
+  const filteredUsers = getUsers.data?.filter(user => {
     if (authFilter === 'all') return true
     return user.auth === authFilter
   })
@@ -138,14 +137,14 @@ export default function Index() {
     return filteredUsers?.filter(user => {
       const firstName = user.firstName.toLowerCase()
       const lastName = user.lastName.toLowerCase()
-      const alias = user.alias.toLowerCase()
+      const alias = user.alias?.toLowerCase()
       const password = user.password.toLowerCase()
       const searchWords = search.toLowerCase().split(' ')
       return searchWords.every(word => {
         return (
           firstName.includes(word) ||
           lastName.includes(word) ||
-          alias.includes(word) ||
+          alias?.includes(word) ||
           password.includes(word)
         )
       })
@@ -164,7 +163,12 @@ export default function Index() {
       <Stack gap={3}>
         <Flex justify="space-between">
           <Heading>{'Users'}</Heading>
-          <Button variant="outline" leftIcon={<FaUserPlus />} colorScheme="green" onClick={onOpen}>
+          <Button
+            variant="outline"
+            leftIcon={<FaUserPlus />}
+            colorScheme="green"
+            onClick={onOpen}
+          >
             New User
           </Button>
         </Flex>
@@ -264,13 +268,12 @@ export default function Index() {
             </HStack>
           </RadioGroup>
         </FormControl>
-        {users &&
-          liveSearch()?.map(user => (
+        {getUsers.data &&
+          liveSearch()?.map((user: any) => (
             <UserCard
               key={user.id}
               handleUserDelete={handleUserDelete}
               handleUserUpdate={handleUserUpdate}
-              setUsers={setUsers}
               uid={user.id}
               firstName={user.firstName}
               lastName={user.lastName}
