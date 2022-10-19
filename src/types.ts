@@ -2,7 +2,7 @@ export interface User {
   id: string
   firstName: string
   lastName: string
-  alias?: string | null
+  alias: string | null
   password: string
   auth: string
 }
@@ -10,7 +10,7 @@ export interface User {
 export interface NewUser {
   firstName: string
   lastName: string
-  alias?: string | null
+  alias: string | null
   password: string
   auth: string
 }
