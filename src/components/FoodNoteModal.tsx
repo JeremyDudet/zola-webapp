@@ -1,10 +1,11 @@
 import React from 'react'
+import Image from 'next/image'
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  Image,
+  // Image,
   VStack,
   ModalBody,
   Flex,
@@ -108,17 +109,27 @@ export default function FoodNoteModal(props: Props) {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Flex mb={6}>
+          <Box
+            display="block"
+            mb={6}
+            w={'100%'}
+            h="auto"
+            borderRadius="md"
+            overflow="hidden"
+          >
             <Image
               src={IMAGE}
-              fit="cover"
-              rounded={'md'}
-              align={'center'}
-              w={'100%'}
-              h={{ base: '100%', sm: '400px', lg: '500px' }}
+              layout="responsive"
+              width="400px"
+              height="283.5px"
+              // fit="cover"
+              // rounded={'md'}
+              // align={'center'}
               alt={'product image'}
+              quality="100"
+              priority={true}
             />
-          </Flex>
+          </Box>
           <Stack>
             <Box as={'header'}>
               <Heading
@@ -146,7 +157,7 @@ export default function FoodNoteModal(props: Props) {
               <VStack spacing={{ base: 4, sm: 6 }}>
                 <Text
                   color={useColorModeValue('gray.500', 'gray.400')}
-                  fontSize={'2xl'}
+                  fontSize={'xl'}
                   fontWeight={'300'}
                 >
                   {props.dish.description}
