@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -20,7 +20,7 @@ import {
   List,
   ListItem
 } from '@chakra-ui/react'
-import type { Dish, Component, Allergen } from '../types'
+import type { Dish, Component, Menu, MenuSection } from '../types'
 
 interface Props {
   dish: Dish
@@ -47,6 +47,34 @@ export default function FoodNoteModal(props: Props) {
   const components = props.dish.components
   const allergens = components?.map(component => component.allergens)
   const allergenList = allergens?.flat()
+
+  const menuList = () => {
+    const menus = props.dish.menu
+    let menuString = ''
+    menus?.forEach((menu: Menu, index?: number) => {
+      // if this is the first one, don't add an & or comma
+      if (index === 0) {
+        menuString += menu.name
+      }
+      // if menus.length is longer than 1, and this is the last one, add an & before it
+      if (menus.length !== 1 && index === menus.length - 1) {
+        menuString += ` & ${menu.name}`
+      }
+      // if this is neither the first nor last, add a comma
+      if (index !== 0 && index !== menus.length - 1) {
+        menuString += `, ${menu.name}`
+      }
+    })
+    return (menuString += ' menu')
+  }
+
+  const menuSection = () => {
+    let menuSections = ''
+    props.dish.menuSection?.forEach(
+      (section: MenuSection) => (menuSections += section.name)
+    )
+    return menuSections
+  }
 
   const Component = ({ component }: { component: Component }) => {
     return (
@@ -75,7 +103,9 @@ export default function FoodNoteModal(props: Props) {
           textColor="gray.500"
           textTransform="uppercase"
           fontFamily={'heading'}
-        >{`${props.dish?.menu[0]?.name} - ${props.dish?.menuSection[0]?.name}`}</ModalHeader>
+        >
+          {`${menuList()} - ${menuSection()}`}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Flex mb={6}>
@@ -164,11 +194,10 @@ export default function FoodNoteModal(props: Props) {
                   </List>
                 </SimpleGrid>
               </Box>
-              <Stack mt={6} direction={'column'} spacing={2} align={'start'}>
+              <Stack direction={'column'} align={'start'}>
                 <Flex align={'center'} gap={2}>
                   <Avatar
                     src={'https://avatars0.githubusercontent.com/u/1164541?v=4'}
-                    alt="Author"
                   />
                   <Stack direction={'column'} spacing={0} fontSize={'sm'}>
                     <Stack direction={'row'} spacing={2} fontSize={'sm'}>

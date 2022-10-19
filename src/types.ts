@@ -140,6 +140,7 @@ export interface NewDish {
 }
 
 export interface MenuSection {
+  forEach(arg0: (menu: MenuSection, index?: number) => void): unknown
   id: string
   name: string
   description: string
