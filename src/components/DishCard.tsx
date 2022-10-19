@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import FoodNoteModal from './FoodNoteModal'
 import UpdateFoodNoteModal from './UpdateFoodNoteModal'
 import { useLongPress } from 'use-long-press'
 import { Box, Heading, Text, Flex, useDisclosure } from '@chakra-ui/react'
@@ -10,6 +11,11 @@ interface Props {
 
 export default function Index({ dish }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isOpenUpdate,
+    onOpen: onOpenUpdate,
+    onClose: onCloseUpdate
+  } = useDisclosure()
 
   const IMAGE =
     'https://res.cloudinary.com/zola-barzola/image/upload/v1665788285/IMG_8139_kod9jp.jpg'
@@ -87,13 +93,14 @@ export default function Index({ dish }: Props) {
   //   }
 
   const bind = useLongPress(() => {
-    return onOpen()
+    return onOpenUpdate()
   })
 
   return (
     <>
-      <UpdateFoodNoteModal isOpen={isOpen} onClose={onClose} />
-      <Flex flexDirection="column" {...bind()}>
+      <FoodNoteModal dish={dish} isOpen={isOpen} onClose={onClose} />
+      <UpdateFoodNoteModal isOpen={isOpenUpdate} onClose={onCloseUpdate} />
+      <Flex flexDirection="column" {...bind()} onClick={onOpen}>
         <Flex alignItems="start" gap="10px">
           <Box
             minW="3rem"
