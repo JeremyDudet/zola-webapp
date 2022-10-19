@@ -83,7 +83,7 @@ export default function LoginForm() {
   function handleSubmit(password: string) {
     let matched = false
     // loop through users array
-    userQuery?.data?.forEach((user: User, index: number, array: User[]) => {
+    userQuery?.data?.forEach((user: User) => {
       if (password === user.password) {
         console.log('password matched')
         matched = true

@@ -30,25 +30,6 @@ enum Auth {
   bar
 }
 
-model Department {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  roles     Role[] // many roles can belong to one department
-}
-
-model Role {
-  id           String     @id @default(cuid())
-  name         String
-  description  String
-  department   Department @relation(fields: [departmentId], references: [id]) // a role can only belong to one department
-  departmentId String
-  created      DateTime   @default(now())
-  modified     DateTime   @updatedAt
-  tasks        Task[] // Many-to-one relationship
-  users        User[] // Many-to-many relationship
-}
 
 model User {
   id              String         @id @default(cuid())
@@ -57,7 +38,6 @@ model User {
   alias           String?
   password        String         @unique
   auth            String         @default("user")
-  roles           Role[] // many roles can belong to one user
   locked          Boolean        @default(false)
   juiceRequested  JuiceRequest[] @relation("UserOnRequest")
   dishEdited      Dish[]         @relation("UserOnDish") // many dishes can be edited by one user
@@ -72,7 +52,6 @@ model Task {
   createdAt    DateTime @default(now())
   lastEdited   DateTime @updatedAt
   priority     Int
-  assignedTo   Role     @relation(fields: [assignedToId], references: [id]) // a task can only be assigned to one role
   assignedToId String
 }
 

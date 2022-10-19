@@ -50,7 +50,7 @@ export const usersRouter = createRouter()
           lastName: input.lastName,
           alias: input.alias,
           password: input.password,
-          auth: input.auth
+          auth: input.auth,
         },
       })    
     }
