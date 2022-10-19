@@ -132,11 +132,7 @@ export default function FoodNoteModal(props: Props) {
           </Box>
           <Stack>
             <Box as={'header'}>
-              <Heading
-                lineHeight={1.1}
-                fontWeight={600}
-                fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}
-              >
+              <Heading lineHeight={1.1} fontWeight={600} fontSize={'2xl'}>
                 {props.dish.name}
               </Heading>
               <Text
@@ -173,7 +169,7 @@ export default function FoodNoteModal(props: Props) {
                 >
                   Components
                 </Text>
-                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+                <SimpleGrid columns={{ base: 1 }} spacing={5}>
                   {components?.map((component: Component) => {
                     return (
                       <Component key={component.id} component={component} />
