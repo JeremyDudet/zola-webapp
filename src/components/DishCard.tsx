@@ -87,7 +87,7 @@ export default function Index({ dish }: Props) {
   //   }
 
   const bind = useLongPress(() => {
-    onOpen()
+    return onOpen()
   })
 
   return (
