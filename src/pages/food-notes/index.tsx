@@ -11,6 +11,7 @@ import {
   Stack,
   Flex,
   Button,
+  Spinner,
   useDisclosure,
   FormControl,
   FormLabel,
@@ -26,7 +27,8 @@ import {
   Table,
   Tbody,
   Td,
-  Tr
+  Tr,
+  Center
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import SearchBar from '../../components/SearchBar'
@@ -46,12 +48,6 @@ export default function Index() {
   const deleteDish = trpc.useMutation('dishes.deleteDish')
   const [search, setSearch] = useState<string>('')
   const [dishes, setDishes] = useState<Dish[] | undefined>()
-
-  // this updates the UI when the userQuery data is first loaded.
-  useEffect(() => {
-    if (getDishes.isFetching) setDishes(undefined)
-    if (getDishes.isFetched) setDishes(getDishes.data)
-  }, [getDishes.data, getDishes.isFetched, getDishes.isFetching])
 
   // const handleDishDelete = useCallback(
   //   async (uid: string) => {
@@ -91,13 +87,16 @@ export default function Index() {
 
   if (!user.firstName) return <LoginForm /> // if user is not logged in, return Auth component
 
+  if (!getDishes.data) {
+    return (
+      <Center paddingTop={16}>
+        <Spinner size="xl" />
+      </Center>
+    )
+  }
+
   return (
     <>
-      {/* <NewDishModal
-        handleCreateDish={handleCreateDish}
-        isOpen={isOpen}
-        onClose={onClose}
-      /> */}
       <Stack>
         <Flex justify="space-between">
           <Heading>{'Food Notes'}</Heading>
@@ -111,7 +110,9 @@ export default function Index() {
           placeholder="Search by name, component, allergen, or menu"
         />
 
-        {dishes && dishes.map(dish => <DishCard key={dish.id} dish={dish} />)}
+        {getDishes.data?.map((dish: any) => (
+          <DishCard key={dish.id} dish={dish} />
+        ))}
       </Stack>
     </>
   )
