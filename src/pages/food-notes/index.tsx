@@ -20,7 +20,7 @@ export default function Index() {
   const utils = trpc.useContext()
   // const createDish = trpc.useMutation('dishes.createDish')
   const getDishes = trpc.useQuery(['dishes.getDishes'])
-  // const updateDish = trpc.useMutation('dishes.updateDish')
+  const updateDish = trpc.useMutation('dishes.updateDish')
   const deleteDish = trpc.useMutation('dishes.deleteDish')
   const [search, setSearch] = useState<string>('')
   const [dishes, setDishes] = useState<Dish[] | undefined>()
@@ -39,16 +39,14 @@ export default function Index() {
   //   [deleteDish, utils]
   // )
 
-  // const handleDishUpdate = useCallback(
-  //   async (data: Dish) => {
-  //     await updateDish.mutateAsync(data, {
-  //       onSuccess: () => {
-  //         utils.invalidateQueries(['dishes.getDishes'])
-  //       }
-  //     })
-  //   },
-  //   [updateDish, utils]
-  // )
+  // update the dishes state and also grab the image id for cloudinary
+  const handleDishUpdate = async (data: Dish) => {
+    await updateDish.mutateAsync(data, {
+      onSuccess: () => {
+        utils.invalidateQueries(['dishes.getDishes'])
+      }
+    })
+  }
 
   // const handleCreateDish = useCallback(
   //   async (data: NewDish) => {
@@ -87,7 +85,11 @@ export default function Index() {
         />
 
         {getDishes.data?.map((dish: any) => (
-          <DishCard key={dish.id} dish={dish} />
+          <DishCard
+            key={dish.id}
+            dish={dish}
+            handleDishUpdate={handleDishUpdate}
+          />
         ))}
       </Stack>
     </>

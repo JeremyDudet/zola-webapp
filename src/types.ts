@@ -123,10 +123,13 @@ export interface Dish {
   description: string
   advertisedDescription: string
   price: number
-  components?: Component[]
-  menu?: Menu
-  menuSection?: MenuSection
+  components: Component[] | null
+  menu: Menu | null
+  menuSection: MenuSection | null
   allergens?: Allergen[]
+  lastEdited?: Date
+  lastEditedBy?: User
+  imageId: string
 }
 
 export interface NewDish {
@@ -137,6 +140,7 @@ export interface NewDish {
   menu?: Menu
   menuSection?: MenuSection
   allergens?: Allergen[]
+  imageId: string
 }
 
 export interface MenuSection {

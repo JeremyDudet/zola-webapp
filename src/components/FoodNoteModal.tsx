@@ -42,9 +42,6 @@ interface Props {
 //   }
 
 export default function FoodNoteModal(props: Props) {
-  const IMAGE =
-    'https://res.cloudinary.com/zola-barzola/image/upload/v1665788285/IMG_8139_kod9jp.jpg'
-
   const components = props.dish.components
   const allergens = components?.map(component => component.allergens)
   const allergenList = allergens?.flat()
@@ -67,6 +64,14 @@ export default function FoodNoteModal(props: Props) {
       }
     })
     return (menuString += ' menu')
+  }
+
+  const handleDisplayedImage = () => {
+    if (props.dish.imageId) {
+      return `https://res.cloudinary.com/zola-barzola/image/upload/v1665788285/${props.dish.imageId}`
+    } else {
+      return '/images/placeholder.png'
+    }
   }
 
   const menuSection = () => {
@@ -118,7 +123,7 @@ export default function FoodNoteModal(props: Props) {
             overflow="hidden"
           >
             <Image
-              src={IMAGE}
+              src={handleDisplayedImage()}
               layout="responsive"
               width="400px"
               height="283.5px"

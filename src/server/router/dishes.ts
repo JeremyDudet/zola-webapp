@@ -44,6 +44,52 @@ export const dishesRouter = createRouter()
     )
   }
   })
+  .mutation("updateDish", {
+    // validate input with Zod
+    input: z.object({
+      id: z.string(), 
+      name: z.string(), 
+      description: z.string(), 
+      advertisedDescription: z.string(), 
+      price: z.number(), 
+      imageId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      // update a user in the database based on the id
+      const dish = await ctx.prisma.dish.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          description: input.description,
+          advertisedDescription: input.advertisedDescription,
+          price: input.price,
+          imageId: input.imageId,
+        },
+      })
+      return dish
+    }
+  })
+  .mutation("updateDishImage", {
+    // validate input with Zod
+    input: z.object({
+      id: z.string(),
+      imageId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      // update a user in the database based on the id
+      const dish = await ctx.prisma.dish.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          imageId: input.imageId,
+        },
+      })
+      return dish
+    }
+  })
   // .mutation("createDish", {
   //   // validate input with Zod
   //   input: z.object({ 
@@ -67,24 +113,6 @@ export const dishesRouter = createRouter()
   //         // components: input.components,          
   //       },
   //     })    
-  //   }
-  // })
-  // .mutation("updateDish", {
-  //   input: z.object({id: z.string(), name: z.string(), description: z.string(), price: z.number()  }),
-  //   async resolve({ ctx, input }) {
-  //     // update a user in the database based on the id
-  //     const user = await ctx.prisma.dish.update({
-  //       where: {
-  //         id: input.id,
-  //       },
-  //       data: {
-  //         name: input.name,
-  //         description: input.description,
-  //         price: input.price,
-  //         components: input.components,
-  //       },
-  //     })
-  //     return user
   //   }
   // })
 

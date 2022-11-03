@@ -56,7 +56,14 @@ export const usersRouter = createRouter()
     }
   })
   .mutation("updateUser", {
-    input: z.object({id: z.string(), firstName: z.string(), lastName: z.string(), alias: z.string().nullable(), password: z.string(), auth: z.string() }),
+    input: z.object({
+      id: z.string(),
+      firstName: z.string(),
+      lastName: z.string(),
+      alias: z.string().nullable(),
+      password: z.string(),
+      auth: z.string() 
+    }),
     async resolve({ ctx, input }) {
       // update a user in the database based on the id
       const user = await ctx.prisma.user.update({
