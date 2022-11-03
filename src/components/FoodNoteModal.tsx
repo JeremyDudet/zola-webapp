@@ -100,6 +100,7 @@ export default function FoodNoteModal(props: Props) {
       blockScrollOnMount={true}
       isOpen={props.isOpen}
       onClose={props.onClose}
+      size={{ base: 'full', md: 'xl' }}
     >
       <ModalOverlay />
       <ModalContent>

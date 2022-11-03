@@ -112,6 +112,7 @@ function UpdateFoodNoteModal(props: Props) {
       blockScrollOnMount={true}
       isOpen={props.isOpen}
       onClose={props.onClose}
+      size={{ base: 'full', md: 'xl' }}
     >
       <ModalOverlay />
       <ModalContent>
@@ -122,7 +123,7 @@ function UpdateFoodNoteModal(props: Props) {
             <FormControl padding="10px" borderRadius={'md'}>
               <Box
                 marginX={'auto'}
-                display="block"
+                display="relative"
                 mb={6}
                 w={'100%'}
                 h="auto"
@@ -144,32 +145,28 @@ function UpdateFoodNoteModal(props: Props) {
                   placeholder="blur"
                   blurDataURL={handleImageDisplay()}
                 />
-              </Box>
-              <Box>
-                <div>
-                  <IconButton
-                    colorScheme={'blue'}
-                    aria-label="upload new image"
-                    icon={<BiEdit />}
-                    size="lg"
-                    position="absolute"
-                    top="15rem"
-                    left="22rem"
-                    as={'label'}
-                    htmlFor="file"
-                    boxShadow={'xl'}
-                    borderRadius={'full'}
-                  />
-                  <input
-                    id="file"
-                    style={{ display: 'none' }}
-                    type="file"
-                    onChange={event =>
-                      onSelectFile(event as React.ChangeEvent<HTMLInputElement>)
-                    }
-                    multiple={false}
-                  />
-                </div>
+                <IconButton
+                  colorScheme={'blue'}
+                  aria-label="upload new image"
+                  icon={<BiEdit />}
+                  size="lg"
+                  position="absolute"
+                  bottom="20px"
+                  right="0px"
+                  as={'label'}
+                  htmlFor="file"
+                  boxShadow={'xl'}
+                  borderRadius={'full'}
+                />
+                <input
+                  id="file"
+                  style={{ display: 'none' }}
+                  type="file"
+                  onChange={event =>
+                    onSelectFile(event as React.ChangeEvent<HTMLInputElement>)
+                  }
+                  multiple={false}
+                />
               </Box>
             </FormControl>
             <Divider />
@@ -221,7 +218,7 @@ function UpdateFoodNoteModal(props: Props) {
               />
             </FormControl>
             <FormControl isRequired>
-              <FormLabel as="legend">Allergens</FormLabel>
+              <FormLabel as="legend">Common Allergens</FormLabel>
               <FormHelperText>
                 {'There are 9 common allergens. Please select all that apply'}
               </FormHelperText>
